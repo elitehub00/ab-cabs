@@ -5,29 +5,72 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // @ts-ignore
 import Onboarding, { NextButtonProps } from "react-native-onboarding-swiper";
 import { router } from "expo-router";
+import { SIZES } from "@/constants/Sizes";
 
 export default function OnBoarding() {
   const pages = [
     {
       backgroundColor: "#fff",
-      image: <Image source={require("../assets/images/on1.png")} />,
-      title: "Anywhere you are",
-      subtitle:
-        "Get picked up from wherever you are, at any time. With AB Cabs, your ride is just a tap away.",
+      image: (
+        <Image
+          source={require("../assets/images/on1.png")}
+          style={styles.img}
+        />
+      ),
+      title: (
+        <View style={{ marginTop: 50 }}>
+          <Text style={styles.subHead}>Welcome to Rideshare</Text>
+          <Text style={styles.title}>Anywhere you are</Text>
+        </View>
+      ),
+      subtitle: (
+        <Text style={styles.subtitle}>
+          Get picked up from wherever you are, at any time. With AB Cabs, your
+          ride is just a tap away.
+        </Text>
+      ),
     },
     {
       backgroundColor: "#fff",
-      image: <Image source={require("../assets/images/on2.png")} />,
-      title: "At anytime",
-      subtitle:
-        "Schedule your rides or book on the go. AB Cabs ensures you're always on time, every time.",
+      image: (
+        <Image
+          source={require("../assets/images/on2.png")}
+          style={styles.img}
+        />
+      ),
+      title: (
+        <View style={{ marginTop: 50 }}>
+          <Text style={styles.subHead}>Choose Your Ride</Text>
+          <Text style={styles.title}>At anytime</Text>
+        </View>
+      ),
+      subtitle: (
+        <Text style={styles.subtitle}>
+          Schedule your rides or book on the go. AB Cabs ensures you're always
+          on time, every time.
+        </Text>
+      ),
     },
     {
       backgroundColor: "#fff",
-      image: <Image source={require("../assets/images/on3.png")} />,
-      title: "Book your car",
-      subtitle:
-        "Find a cab instantly and pay effortlessly. Booking your next ride has never been easier with AB Cabs.",
+      image: (
+        <Image
+          source={require("../assets/images/on3.png")}
+          style={styles.img}
+        />
+      ),
+      title: (
+        <View style={{ marginTop: 50 }}>
+          <Text style={styles.subHead}>Fast and Secure Payments</Text>
+          <Text style={styles.title}>Book your car</Text>
+        </View>
+      ),
+      subtitle: (
+        <Text style={styles.subtitle}>
+          Find a cab instantly and pay effortlessly. Booking your next ride has
+          never been easier with AB Cabs.
+        </Text>
+      ),
     },
   ];
 
@@ -78,8 +121,6 @@ export default function OnBoarding() {
   return (
     <Onboarding
       pages={pages}
-      titleStyles={styles.title}
-      subTitleStyles={styles.subtitle}
       bottomBarColor="#fff"
       bottomBarHeight={120}
       DotComponent={CustomDot}
@@ -95,7 +136,9 @@ export default function OnBoarding() {
 const styles = StyleSheet.create({
   pageContainer: {
     alignItems: "flex-start", // Align all content in the container to the left
+    justifyContent: "flex-start",
     paddingHorizontal: 24,
+    marginTop: SIZES.height * 0.1,
   },
   title: {
     color: Colors["light"].text,
@@ -104,11 +147,18 @@ const styles = StyleSheet.create({
     textAlign: "left",
     alignSelf: "flex-start",
     width: "100%",
+    marginVertical: 12,
   },
   subtitle: {
     color: "#5D5D5D",
     fontSize: 13,
     textAlign: "left",
+  },
+  subHead: {
+    color: "#5D5D5D",
+    fontSize: 15,
+    textAlign: "left",
+    fontWeight: "bold",
   },
   dot: {
     marginHorizontal: 3,
@@ -157,5 +207,10 @@ const styles = StyleSheet.create({
     margin: 12,
     height: 42,
     width: 150,
+  },
+  img: {
+    width: "100%",
+    height: 250,
+    resizeMode: "contain",
   },
 });

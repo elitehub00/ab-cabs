@@ -31,7 +31,7 @@ export default function Login() {
           theme={{
             colors: {
               primary: Colors["light"].text,
-              outline: Colors["light"].secondary,
+              outline: Colors["light"].text,
             },
           }}
           onPress={login}
