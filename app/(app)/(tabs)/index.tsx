@@ -1,30 +1,34 @@
-import { StyleSheet, Text, View } from 'react-native';
-
-// import { View } from 'react-native-reanimated/lib/typescript/Animated';
+import { StyleSheet, View, TouchableOpacity, Pressable } from "react-native";
+import { Text, Card } from "react-native-paper";
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
+import { CustomHeader } from "@/components/ui/CustomHeader";
 
 export default function HomeScreen() {
   return (
-    <View style={{ flex: 1 , alignItems: 'center', justifyContent: 'center'}}>
-      <Text>home</Text>
-    </View>
+    <>
+      <Tabs.Screen
+        options={{
+          header: () => <CustomHeader />,
+        }}
+      />
+      <View style={[styles.container]}>
+        <Card
+          mode="contained"
+          contentStyle={{ paddingVertical: 12,paddingHorizontal:0}}
+          theme={{ colors: { surfaceVariant: Colors["light"].background } , roundness: 4 }}
+        >
+          <Card.Title title="Book A Ride Now" titleStyle={{ fontSize: 16, fontWeight: "700" }} />
+        </Card>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    margin: 24,
   },
 });
