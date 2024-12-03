@@ -10,7 +10,7 @@ import { SIZES } from "@/constants/Sizes";
 export default function OnBoarding() {
   const pages = [
     {
-      backgroundColor: "#fff",
+      backgroundColor: Colors["light"].secondary,
       image: (
         <Image
           source={require("../assets/images/on1.png")}
@@ -19,19 +19,19 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: 50 }}>
-          <Text style={styles.subHead}>Welcome to Rideshare</Text>
-          <Text style={styles.title}>Anywhere you are</Text>
+          <Text variant="titleMedium" style={styles.subHead}>Welcome to Rideshare</Text>
+          <Text variant="headlineLarge" style={styles.title}>Anywhere you are</Text>
         </View>
       ),
       subtitle: (
-        <Text style={styles.subtitle}>
+        <Text variant="bodyMedium" style={styles.subtitle}>
           Get picked up from wherever you are, at any time. With AB Cabs, your
           ride is just a tap away.
         </Text>
       ),
     },
     {
-      backgroundColor: "#fff",
+      backgroundColor: Colors["light"].secondary,
       image: (
         <Image
           source={require("../assets/images/on2.png")}
@@ -40,19 +40,19 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: 50 }}>
-          <Text style={styles.subHead}>Choose Your Ride</Text>
-          <Text style={styles.title}>At anytime</Text>
+          <Text variant="titleMedium" style={styles.subHead}>Choose Your Ride</Text>
+          <Text variant="headlineLarge" style={styles.title}>At anytime</Text>
         </View>
       ),
       subtitle: (
-        <Text style={styles.subtitle}>
+        <Text variant="bodyMedium" style={styles.subtitle}>
           Schedule your rides or book on the go. AB Cabs ensures you're always
           on time, every time.
         </Text>
       ),
     },
     {
-      backgroundColor: "#fff",
+      backgroundColor: Colors["light"].secondary,
       image: (
         <Image
           source={require("../assets/images/on3.png")}
@@ -61,12 +61,12 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: 50 }}>
-          <Text style={styles.subHead}>Fast and Secure Payments</Text>
-          <Text style={styles.title}>Book your car</Text>
+          <Text variant="titleMedium" style={styles.subHead}>Fast and Secure Payments</Text>
+          <Text variant="headlineLarge" style={styles.title}>Book your car</Text>
         </View>
       ),
       subtitle: (
-        <Text style={styles.subtitle}>
+        <Text variant="bodyMedium" style={styles.subtitle}>
           Find a cab instantly and pay effortlessly. Booking your next ride has
           never been easier with AB Cabs.
         </Text>
@@ -121,7 +121,7 @@ export default function OnBoarding() {
   return (
     <Onboarding
       pages={pages}
-      bottomBarColor="#fff"
+      bottomBarColor={Colors["light"].secondary}
       bottomBarHeight={120}
       DotComponent={CustomDot}
       NextButtonComponent={NextButton}
@@ -142,23 +142,23 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors["light"].text,
-    fontSize: 32,
+    // fontSize: 32,
     fontWeight: "bold",
     textAlign: "left",
     alignSelf: "flex-start",
     width: "100%",
-    marginVertical: 12,
+    marginVertical: 8,
   },
   subtitle: {
-    color: "#5D5D5D",
-    fontSize: 13,
+    // color: "#5D5D5D",
+    // fontSize: 13,
     textAlign: "left",
   },
   subHead: {
-    color: "#5D5D5D",
-    fontSize: 15,
+    // color: "#5D5D5D",
+    // fontSize: 15,
     textAlign: "left",
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   dot: {
     marginHorizontal: 3,

@@ -10,6 +10,7 @@ export const Colors = {
   light: {
     text: "#3F4446",
     textAcc:"#5D5D5D",
+    textAcc1:"rgba(131, 131, 131, 1)",
     background: "#fff",
     tint: tintColorLight,
     icon: "#687076",

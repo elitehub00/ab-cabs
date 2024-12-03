@@ -15,14 +15,15 @@ export function CustomHeader() {
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <View>
-          <Text variant="bodySmall" style={{ color: Colors["light"].textAcc }}>
+          <Text variant="bodyMedium" style={{ color: Colors["light"].textAcc }}>
             Hi Sivarathan Sivarajah,{" "}
           </Text>
           <Text
-            variant="titleLarge"
+            variant="headlineMedium"
             style={{ fontWeight: "bold", marginTop: 2 }}
           >
             Welcome Back
@@ -82,7 +83,7 @@ export function CustomHeader() {
             style={{ marginRight: 12 }}
           />
           <View>
-            <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
+            <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
               Special Promo Code!!!
             </Text>
             <Text
