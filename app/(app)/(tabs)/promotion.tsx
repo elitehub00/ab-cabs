@@ -3,13 +3,20 @@ import { StyleSheet, View } from "react-native";
 import { Card, Text, Button } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import { Tabs } from "expo-router";
+import { CustomHeader } from "@/components/ui/CustomHeader";
 
 export default function Promotion() {
   return (
     <View style={styles.container}>
+      <Tabs.Screen
+        options={{
+          header: () => <CustomHeader title="Promotions" isHome={false} />,
+        }}
+      />
       <View style={styles.contentContainer}>
         <FlashList
-          data={[1, 2, 3, 4,6,7,8,9,10,11,12]}
+          data={[1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12]}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <Card

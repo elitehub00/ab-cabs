@@ -3,10 +3,17 @@ import { SIZES } from "@/constants/Sizes";
 import { StyleSheet, Image, View } from "react-native";
 import { Avatar, TextInput, Text, Button } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { CustomHeader } from "@/components/ui/CustomHeader";
 
 export default function Account() {
   return (
     <View style={styles.container}>
+      <Tabs.Screen
+        options={{
+          header: () => <CustomHeader title="Your Account" isHome={false} />,
+        }}
+      />
       <Image
         source={require("@/assets/images/banner.png")}
         style={{

@@ -24,7 +24,7 @@ export default function OnBoarding() {
         </View>
       ),
       subtitle: (
-        <Text variant="bodyMedium" style={styles.subtitle}>
+        <Text variant="bodyLarge" style={styles.subtitle}>
           Get picked up from wherever you are, at any time. With AB Cabs, your
           ride is just a tap away.
         </Text>
@@ -45,7 +45,7 @@ export default function OnBoarding() {
         </View>
       ),
       subtitle: (
-        <Text variant="bodyMedium" style={styles.subtitle}>
+        <Text variant="bodyLarge" style={styles.subtitle}>
           Schedule your rides or book on the go. AB Cabs ensures you're always
           on time, every time.
         </Text>
@@ -66,7 +66,7 @@ export default function OnBoarding() {
         </View>
       ),
       subtitle: (
-        <Text variant="bodyMedium" style={styles.subtitle}>
+        <Text variant="bodyLarge" style={styles.subtitle}>
           Find a cab instantly and pay effortlessly. Booking your next ride has
           never been easier with AB Cabs.
         </Text>
@@ -89,7 +89,7 @@ export default function OnBoarding() {
   const NextButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.next} onPress={onPress}>
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Next</Text>
+        <Text style={{ color: "#fff", fontWeight: "bold" ,fontSize:15}}>Next</Text>
       </TouchableOpacity>
     );
   };
@@ -97,7 +97,7 @@ export default function OnBoarding() {
   const SkipButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.skip} onPress={onPress}>
-        <Text style={{ fontWeight: "bold" }}>Skip</Text>
+        <Text style={{ fontWeight: "bold",fontSize:15 }}>Skip</Text>
       </TouchableOpacity>
     );
   };
@@ -105,7 +105,7 @@ export default function OnBoarding() {
   const DoneButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.done} onPress={onPress}>
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+        <Text style={{ color: "#fff", fontWeight: "bold",fontSize:15}}>
           Continue to App
         </Text>
       </TouchableOpacity>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start", // Align all content in the container to the left
     justifyContent: "flex-start",
     paddingHorizontal: 24,
-    marginTop: SIZES.height * 0.1,
+    marginTop: SIZES.height * 0.2,
   },
   title: {
     color: "black",
@@ -153,11 +153,14 @@ const styles = StyleSheet.create({
     // color: "#5D5D5D",
     // fontSize: 13,
     textAlign: "left",
+    marginTop:12
+    
   },
   subHead: {
     // color: "#5D5D5D",
     // fontSize: 15,
     textAlign: "left",
+    marginBottom:8,
     // fontWeight: "bold",
   },
   dot: {
