@@ -26,13 +26,15 @@ export default function Login() {
         <Button
           icon="google"
           mode="outlined"
-          labelStyle={{ textAlign: "center" }}
-          contentStyle={{ width: "100%", height: 48 }}
+          labelStyle={{ textAlign: "center",color:"black" }}
+          contentStyle={{ height: 48,width:"100%",padding:0 }}
+          style={{ borderRadius: 8}}
           theme={{
             colors: {
               primary: Colors["light"].text,
               outline: Colors["light"].text,
             },
+            roundness:0
           }}
           onPress={login}
         >
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "bold",
+    color:"black",
     marginBottom: 48,
   },
 });

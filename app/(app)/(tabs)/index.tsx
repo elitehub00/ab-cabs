@@ -5,24 +5,25 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { Text, Card, TextInput } from "react-native-paper";
+import { Text, Card, Button } from "react-native-paper";
 import { Tabs } from "expo-router";
 import {
   Ionicons,
   MaterialIcons,
   Feather,
-  AntDesign,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import { useState } from "react";
+import { SIZES } from "@/constants/Sizes";
 
 const hisArr = [
-  { name: "My Home", pluse: true, active: true },
-  { name: "Potomac Brhdhdhdd", pluse: false, active: false },
-  { name: "Navy Yardhshjd", pluse: true, active: false },
-  { name: "My Columbia Rigghf", pluse: false, active: true },
-  { name: "My Home", pluse: true, active: false },
+  { name: "Home", address: "2972 Westheimer Rd." },
+  { name: "Work", address: "2972 Westheimer Rd." },
+  { name: "Sone", address: "2972 Westheimer Rd." },
+  { name: "Shop", address: "2972 Westheimer Rd." },
+  { name: "Palace", address: "2972 Westheimer Rd." },
 ];
 
 export default function HomeScreen() {
@@ -46,7 +47,7 @@ export default function HomeScreen() {
         >
           <Card.Title
             title="Book A Ride Now"
-            // titleStyle={{ fontSize: 16, fontWeight: "700" }}
+            titleStyle={{ fontWeight: "bold" }}
             titleVariant="titleMedium"
           />
           <Card.Content style={{ gap: 20 }}>
@@ -105,14 +106,33 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        <View style={{ marginTop: 24 }}>
+        <View style={{ marginVertical: 24 }}>
+          <Button
+            mode="contained"
+            theme={{ roundness: 0 }}
+            style={{ borderRadius: 8 }}
+            dark
+            // buttonColor={"black"}
+            textColor="white"
+            contentStyle={{ height: 50 }}
+          >
+            Book Now
+          </Button>
+        </View>
+
+        <View>
           <View style={styles.history}>
-            <Text variant="titleMedium">
-              History Destination
+            <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
+              Saved Locations
             </Text>
-            <Ionicons name="arrow-forward-circle" size={24} color="black" />
+            <MaterialCommunityIcons
+              name="plus-circle"
+              size={24}
+              color="black"
+            />
           </View>
         </View>
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -120,45 +140,15 @@ export default function HomeScreen() {
         >
           {hisArr.map((item, index) => (
             <View key={index} style={{ marginRight: 8 }}>
-              <View style={{ position: "relative" }}>
-                <View
-                  style={item.active ? styles.cardActive : styles.cardDefault}
-                >
-                  <Ionicons
-                    name="location-outline"
-                    size={24}
-                    color={
-                      item.active
-                        ? Colors["light"].background
-                        : Colors["light"].textAcc1
-                    }
-                  />
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={{
-                      fontSize: 11,
-                      fontWeight: "700",
-                      width:"80%",
-                      color: item.active
-                        ? Colors["light"].background
-                        : Colors["light"].text,
-                    }}
-                  >
-                    {item.name}
-                  </Text>
+              <View style={styles.cardDefault}>
+                <View style={styles.location}>
+                  <Ionicons name="location-outline" size={34} color={"black"} />
+                  <View>
+                    <Text variant="titleMedium"> {item.name}</Text>
+                    <Text variant="bodySmall"> {item.address}</Text>
+                  </View>
                 </View>
               </View>
-              {item.pluse && (
-                <View style={styles.plusIcon}>
-                  <Feather
-                    name="plus"
-                    size={15}
-                    color="#fff"
-                    style={{ textAlign: "center" }}
-                  />
-                </View>
-              )}
             </View>
           ))}
         </ScrollView>
@@ -188,38 +178,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  cardActive: {
-    backgroundColor: Colors["light"].primary,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    width: 90,
-    height: 60,
-  },
   cardDefault: {
     backgroundColor: Colors["light"].background,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    alignItems: "center",
     justifyContent: "center",
     borderColor: Colors["light"].accent,
     borderWidth: 1,
     borderRadius: 8,
-    width: 90,
-    height: 60,
+    width: SIZES.width * 0.5,
+    height: 80,
   },
-  plusIcon: {
-    width: 24,
-    height: 24,
-    backgroundColor: "#48DD7E",
-    borderRadius: 8,
-    position: "absolute",
-    top: 0,
-    right: -5,
+  location: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1,
+    justifyContent: "flex-start",
+    gap: 8,
   },
 });

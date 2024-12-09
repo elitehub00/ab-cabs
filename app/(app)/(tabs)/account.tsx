@@ -2,6 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { SIZES } from "@/constants/Sizes";
 import { StyleSheet, Image, View } from "react-native";
 import { Avatar, TextInput, Text, Button } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Account() {
   return (
@@ -16,10 +17,23 @@ export default function Account() {
       />
       <View style={styles.contentContainer}>
         <View style={styles.avtar}>
-          <Avatar.Image
-            size={SIZES.width * 0.3}
-            source={require("@/assets/images/icon.png")}
-          />
+          <View style={{ position: "relative" }}>
+            <Avatar.Image
+              size={SIZES.width * 0.3}
+              source={require("@/assets/images/account.png")}
+              style={{
+                borderColor: Colors["light"].primary,
+                // position: "relative",
+              }}
+            />
+            <View style={styles.icon}>
+              <MaterialCommunityIcons
+                name="square-edit-outline"
+                size={12}
+                color="black"
+              />
+            </View>
+          </View>
         </View>
         <View style={styles.form}>
           <View>
@@ -120,12 +134,12 @@ export default function Account() {
 
           <Button
             mode="contained"
-            theme={{roundness:0}}
-            style={{borderRadius:8}}
+            theme={{ roundness: 0 }}
+            style={{ borderRadius: 8, marginTop: 16 }}
             dark
-            buttonColor={"black"}
+            // buttonColor={"black"}
             textColor="white"
-            contentStyle={{ height: 50}}
+            contentStyle={{ height: 50 }}
           >
             Save
           </Button>
@@ -147,9 +161,25 @@ const styles = StyleSheet.create({
   avtar: {
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 24,
+    marginTop: -70,
+    marginBottom: 24,
+    position: "relative",
   },
   form: {
     gap: 16,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    backgroundColor: "white",
+    borderRadius: 12,
+    borderColor: Colors["light"].primary,
+    borderWidth: 1,
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });

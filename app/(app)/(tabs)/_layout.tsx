@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-
+import { Feather } from "@expo/vector-icons";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
@@ -33,7 +33,16 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <Feather name="home" size={28} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: "My Rides",
+          tabBarIcon: ({ color }) => (
+            <Feather name="clock" size={28} color={color} />
           ),
         }}
       />
@@ -42,25 +51,17 @@ export default function TabLayout() {
         options={{
           title: "Promotions",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="local-offer" size={24} color={color} />
+            <MaterialIcons name="local-offer" size={28} color={color} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="account"
         options={{
-          title: "Account",
+          title: "Your Account",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <Feather name="user" size={28} color={color} />
           ),
         }}
       />

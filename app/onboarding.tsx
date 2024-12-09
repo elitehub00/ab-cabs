@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     marginTop: SIZES.height * 0.1,
   },
   title: {
-    color: Colors["light"].text,
+    color: "black",
     // fontSize: 32,
     fontWeight: "bold",
     textAlign: "left",

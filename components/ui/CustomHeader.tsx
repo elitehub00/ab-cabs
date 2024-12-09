@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Pressable, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
@@ -63,9 +63,15 @@ export function CustomHeader() {
         style={{
           marginTop: 24,
           borderRadius: 12,
+          backgroundColor: Colors["light"].background,
+          shadowColor: "#171717",
+          shadowOffset: { width: 4, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 5,
           borderWidth: 1,
+          borderColor: "#E0E0E0",
+          elevation: 8,
           padding: 12,
-          borderColor: "#DEDEDE",
           flexDirection: "row",
           justifyContent: "space-between",
         }}
@@ -74,39 +80,35 @@ export function CustomHeader() {
           style={{
             flexDirection: "row",
             justifyContent: "flex-start",
+            alignItems: "flex-end",
           }}
         >
-          <Ionicons
-            name="menu-sharp"
+          <MaterialIcons
+            name="call"
             size={32}
-            color={Colors["light"].text}
+            color={"black"}
             style={{ marginRight: 12 }}
           />
-          <View>
-            <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
-              Special Promo Code!!!
-            </Text>
-            <Text
-              variant="bodySmall"
-              style={{ color: Colors["light"].textAcc }}
-            >
-              Use This Code For Get Discount
-            </Text>
-          </View>
+
+          <Text
+            variant="titleLarge"
+            style={{ fontWeight: "bold", color: "black" }}
+          >
+            {"+1 (142) 455 - 4444"}
+          </Text>
         </View>
         <Pressable
           style={{
             backgroundColor: "black",
             borderRadius: 12,
-            paddingVertical: 4,
             paddingHorizontal: 8,
             justifyContent: "center",
             alignItems: "center",
           }}
           onPress={() => {}}
         >
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 11 }}>
-            Get Now
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+            Call Now
           </Text>
         </Pressable>
       </View>
