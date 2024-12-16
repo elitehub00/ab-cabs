@@ -33,7 +33,9 @@ export default function HomeScreen() {
     <View style={{ flex: 1, backgroundColor: Colors["light"].secondary }}>
       <Tabs.Screen
         options={{
-          header: () => <CustomHeader title="Welcome Back" isHome={true}  />,
+          header: () => (
+            <CustomHeader title="Welcome Back" isHome={true} isMenu={false} />
+          ),
         }}
       />
       <ScrollView style={[styles.container]}>
@@ -114,7 +116,7 @@ export default function HomeScreen() {
             dark
             // buttonColor={"black"}
             textColor="white"
-            labelStyle={{fontSize:15}}
+            labelStyle={{ fontSize: 15 }}
             contentStyle={{ height: 50 }}
           >
             Book Now

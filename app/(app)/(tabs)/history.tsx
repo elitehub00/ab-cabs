@@ -20,7 +20,7 @@ export default function TabTwoScreen() {
     <View style={styles.container}>
       <Tabs.Screen
         options={{
-          header: () => <CustomHeader title="My Rides" isHome={false} />,
+          header: () => <CustomHeader title="My Rides" isHome={false} isMenu={false} />,
         }}
       />
       <View style={styles.contentContainer}>

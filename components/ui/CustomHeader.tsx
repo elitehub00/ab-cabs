@@ -2,13 +2,15 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Pressable, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
+import { router } from "expo-router";
 
 interface CustomHeaderProps {
   title: string;
   isHome: boolean;
+  isMenu: boolean;
 }
 
-export function CustomHeader({ title, isHome }: CustomHeaderProps) {
+export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
   return (
     <View
       style={{
@@ -40,7 +42,9 @@ export function CustomHeader({ title, isHome }: CustomHeaderProps) {
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => {
+            isMenu ? router.back() : router.push("/(app)/(menu)");
+          }}
           style={{
             backgroundColor: Colors["light"].background,
             justifyContent: "center",
@@ -58,9 +62,9 @@ export function CustomHeader({ title, isHome }: CustomHeaderProps) {
           }}
         >
           <Ionicons
-            name="menu-sharp"
-            size={24}
-            color={Colors["light"].text}
+            name={isMenu ? "arrow-back" : "menu-sharp"}
+            size={isMenu ? 20 : 24}
+            color={isMenu ? "black" : Colors["light"].text}
             style={{
               margin: 0,
               padding: 0,

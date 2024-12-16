@@ -11,7 +11,7 @@ export default function Account() {
     <View style={styles.container}>
       <Tabs.Screen
         options={{
-          header: () => <CustomHeader title="Your Account" isHome={false} />,
+          header: () => <CustomHeader title="Your Account" isHome={false} isMenu={false} />,
         }}
       />
       <Image

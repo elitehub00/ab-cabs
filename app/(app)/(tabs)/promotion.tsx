@@ -11,7 +11,7 @@ export default function Promotion() {
     <View style={styles.container}>
       <Tabs.Screen
         options={{
-          header: () => <CustomHeader title="Promotions" isHome={false} />,
+          header: () => <CustomHeader title="Promotions" isHome={false} isMenu={false} />,
         }}
       />
       <View style={styles.contentContainer}>
