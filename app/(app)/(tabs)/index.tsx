@@ -38,7 +38,10 @@ export default function HomeScreen() {
           ),
         }}
       />
-      <ScrollView style={[styles.container]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={[styles.container]}
+      >
         <Card
           mode="contained"
           contentStyle={{ paddingVertical: 12, paddingHorizontal: 0 }}
@@ -108,7 +111,7 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        <View style={{ marginVertical: 24 }}>
+        <View style={{ marginVertical: SIZES.width * 0.05 }}>
           <Button
             mode="contained"
             theme={{ roundness: 0 }}
@@ -123,23 +126,17 @@ export default function HomeScreen() {
           </Button>
         </View>
 
-        <View>
-          <View style={styles.history}>
-            <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
-              Saved Locations
-            </Text>
-            <MaterialCommunityIcons
-              name="plus-circle"
-              size={24}
-              color="black"
-            />
-          </View>
+        <View style={styles.history}>
+          <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
+            Saved Locations
+          </Text>
+          <MaterialCommunityIcons name="plus-circle" size={24} color="black" />
         </View>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={{ marginTop: 24 }}
+          style={{ marginTop: SIZES.width * 0.05, marginBottom: SIZES.width * 0.1 }}
         >
           {hisArr.map((item, index) => (
             <View key={index} style={{ marginRight: 8 }}>
@@ -163,8 +160,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 24,
-    marginBottom: 0,
+    paddingTop: SIZES.width * 0.05,
+    marginHorizontal: SIZES.width * 0.05,
   },
   textbox: {
     backgroundColor: Colors["light"].secondary,
