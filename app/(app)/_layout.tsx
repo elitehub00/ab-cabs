@@ -4,10 +4,11 @@ import { ActivityIndicator } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/ctx";
 
 export default function AppLayout() {
+  const { isAuthenticated, isLoading } = useAuth();
   const [onboarded, setOnboarded] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -17,19 +18,15 @@ export default function AppLayout() {
   const onboarding = async () => {
     setLoading(true);
     const onboarded = await AsyncStorage.getItem("onboarded");
-    const login = await AsyncStorage.getItem("login");
 
     if (onboarded && onboarded === "true") {
       setOnboarded(true);
     }
 
-    if (login && login === "true") {
-      setLoggedIn(true);
-    }
     setLoading(false);
   };
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator
@@ -45,7 +42,7 @@ export default function AppLayout() {
     return <Redirect href="/onboarding" />;
   }
 
-  if (!loggedIn) {
+  if (!isAuthenticated) {
     return <Redirect href="/login" />;
   }
 

@@ -42,6 +42,9 @@
           },
           "imageWidth": 100
         }
+      ],
+      [
+        "@react-native-google-signin/google-signin"
       ]
     ],
     "experiments": {
