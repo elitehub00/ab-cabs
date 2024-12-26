@@ -23,7 +23,7 @@ export default function Menu() {
             source={require("@/assets/images/account.png")}
           />
           <View>
-            <Text variant="labelLarge">Ricard Steven G.</Text>
+            <Text variant="labelMedium">Ricard Steven G.</Text>
             <Text variant="bodyMedium">richarsteven90@gmail.com</Text>
             <Text variant="bodyMedium">Washington D.C, USA</Text>
           </View>
@@ -33,7 +33,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="info" size={32} color="black" />
-                <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
                   About Us
                 </Text>
               </View>
@@ -47,7 +47,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="globe" size={32} color="black" />
-                <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
                   Our Website
                 </Text>
               </View>
@@ -61,7 +61,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="star" size={32} color="black" />
-                <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
                   Refer a friend / Redeem invitation code
                 </Text>
               </View>
@@ -75,7 +75,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="help-circle" size={32} color="black" />
-                <Text variant="labelLarge" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
                   Help and Support
                 </Text>
               </View>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   menu: {
-    marginTop: 72,
+    marginTop: 24,
     gap: 16,
   },
   menuCard: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   promotion: {
-    marginVertical: 72,
+    marginVertical: 24,
     borderRadius: 8,
   },
 });

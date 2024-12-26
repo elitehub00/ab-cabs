@@ -47,7 +47,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 24,
+    margin: SIZES.width * 0.05,
   },
   loginCom: {
     marginTop: SIZES.height * 0.2,
@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   img: {
-    width: 300,
+    width: SIZES.width * 0.7,
     // height: 127,
     resizeMode: "contain",
   },
   text: {
     fontWeight: "bold",
     color:"black",
-    marginBottom: 48,
+    marginBottom: SIZES.height * 0.05,
   },
 });

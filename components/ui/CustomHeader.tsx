@@ -95,7 +95,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
             style={{
               flexDirection: "row",
               justifyContent: "flex-start",
-              alignItems: "flex-end",
+              alignItems: "center",
             }}
           >
             <MaterialIcons
@@ -106,7 +106,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
             />
 
             <Text
-              variant="titleLarge"
+              variant="titleMedium"
               style={{ fontWeight: "bold", color: "black" }}
             >
               {"+1 (142) 455 - 4444"}

@@ -7,6 +7,7 @@ import Onboarding, { NextButtonProps } from "react-native-onboarding-swiper";
 import { router } from "expo-router";
 import { SIZES } from "@/constants/Sizes";
 
+const scaleSize = (size: any) => (SIZES.width / 375) * size;
 export default function OnBoarding() {
   const pages = [
     {
@@ -18,9 +19,13 @@ export default function OnBoarding() {
         />
       ),
       title: (
-        <View style={{ marginTop: 50 }}>
-          <Text variant="titleMedium" style={styles.subHead}>Welcome to Rideshare</Text>
-          <Text variant="headlineLarge" style={styles.title}>Anywhere you are</Text>
+        <View style={{ marginTop: SIZES.height * 0.01 }}>
+          <Text variant="titleMedium" style={styles.subHead}>
+            Welcome to Rideshare
+          </Text>
+          <Text variant="headlineLarge" style={styles.title}>
+            Anywhere you are
+          </Text>
         </View>
       ),
       subtitle: (
@@ -39,9 +44,13 @@ export default function OnBoarding() {
         />
       ),
       title: (
-        <View style={{ marginTop: 50 }}>
-          <Text variant="titleMedium" style={styles.subHead}>Choose Your Ride</Text>
-          <Text variant="headlineLarge" style={styles.title}>At anytime</Text>
+        <View style={{ marginTop: SIZES.height * 0.01 }}>
+          <Text variant="titleMedium" style={styles.subHead}>
+            Choose Your Ride
+          </Text>
+          <Text variant="headlineLarge" style={styles.title}>
+            At anytime
+          </Text>
         </View>
       ),
       subtitle: (
@@ -60,9 +69,13 @@ export default function OnBoarding() {
         />
       ),
       title: (
-        <View style={{ marginTop: 50 }}>
-          <Text variant="titleMedium" style={styles.subHead}>Fast and Secure Payments</Text>
-          <Text variant="headlineLarge" style={styles.title}>Book your car</Text>
+        <View style={{ marginTop: SIZES.height * 0.01 }}>
+          <Text variant="titleMedium" style={styles.subHead}>
+            Fast and Secure Payments
+          </Text>
+          <Text variant="headlineLarge" style={styles.title}>
+            Book your car
+          </Text>
         </View>
       ),
       subtitle: (
@@ -89,7 +102,11 @@ export default function OnBoarding() {
   const NextButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.next} onPress={onPress}>
-        <Text style={{ color: "#fff", fontWeight: "bold" ,fontSize:15}}>Next</Text>
+        <Text
+          style={{ color: "#fff", fontWeight: "bold", fontSize: scaleSize(15) }}
+        >
+          Next
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -97,7 +114,9 @@ export default function OnBoarding() {
   const SkipButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.skip} onPress={onPress}>
-        <Text style={{ fontWeight: "bold",fontSize:15 }}>Skip</Text>
+        <Text style={{ fontWeight: "bold", fontSize: scaleSize(15) }}>
+          Skip
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -105,7 +124,9 @@ export default function OnBoarding() {
   const DoneButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.done} onPress={onPress}>
-        <Text style={{ color: "#fff", fontWeight: "bold",fontSize:15}}>
+        <Text
+          style={{ color: "#fff", fontWeight: "bold", fontSize: scaleSize(15) }}
+        >
           Continue to App
         </Text>
       </TouchableOpacity>
@@ -137,8 +158,8 @@ const styles = StyleSheet.create({
   pageContainer: {
     alignItems: "flex-start", // Align all content in the container to the left
     justifyContent: "flex-start",
-    paddingHorizontal: 24,
-    marginTop: SIZES.height * 0.2,
+    paddingHorizontal: SIZES.width * 0.05,
+    marginTop: SIZES.height * 0.1,
   },
   title: {
     color: "black",
@@ -153,14 +174,13 @@ const styles = StyleSheet.create({
     // color: "#5D5D5D",
     // fontSize: 13,
     textAlign: "left",
-    marginTop:12
-    
+    marginTop: 12,
   },
   subHead: {
     // color: "#5D5D5D",
     // fontSize: 15,
     textAlign: "left",
-    marginBottom:8,
+    marginBottom: 8,
     // fontWeight: "bold",
   },
   dot: {
@@ -213,7 +233,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: "100%",
-    height: 250,
+    height: SIZES.width * 0.8,
     resizeMode: "contain",
   },
 });
