@@ -16,7 +16,7 @@ export default function Login() {
   GoogleSignin.configure({
     // scopes: ["https://www.googleapis.com/auth/drive"],
     webClientId:
-      "378744098867-7o9qdm0t38lvkc598caioh26jbpmtsao.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access). Required to get the `idToken` on the user object!
+      "378744098867-7o9qdm0t38lvkc598caioh26jbpmtsao.apps.googleusercontent.com",
     iosClientId:
       "378744098867-1ea1qcrc3164io5d1suvapicctrb7uav.apps.googleusercontent.com",
   });
@@ -48,12 +48,10 @@ export default function Login() {
           }}
           onPress={async () => {
             try {
-              console.log("object");
               await GoogleSignin.hasPlayServices();
               const userInfo = await GoogleSignin.signIn();
               if (userInfo.data?.idToken) {
                 await login(userInfo.data?.idToken);
-                // console.log(userInfo);
                 router.replace("/");
               } else {
                 throw new Error("no ID token present!");

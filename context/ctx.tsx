@@ -112,11 +112,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
       value={{
         login,
         logout,
-
         setupUser,
         getUser,
         user,
-
         isLoading,
         isAuthenticated,
       }}
