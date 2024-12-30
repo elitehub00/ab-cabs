@@ -4,13 +4,23 @@ import { SIZES } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import {
+  GoogleSignin,
+  // GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import { useAuth } from "@/context/ctx";
 
 export default function Login() {
-  const login = async () => {
-    await AsyncStorage.setItem("login", "true");
+  const { login } = useAuth();
+  GoogleSignin.configure({
+    // scopes: ["https://www.googleapis.com/auth/drive"],
+    webClientId:
+      "378744098867-7o9qdm0t38lvkc598caioh26jbpmtsao.apps.googleusercontent.com",
+    iosClientId:
+      "378744098867-1ea1qcrc3164io5d1suvapicctrb7uav.apps.googleusercontent.com",
+  });
 
-    router.replace("/(app)/(tabs)");
-  };
   return (
     <View style={styles.container}>
       <View style={styles.loginCom}>
@@ -26,17 +36,41 @@ export default function Login() {
         <Button
           icon="google"
           mode="outlined"
-          labelStyle={{ textAlign: "center",color:"black" }}
-          contentStyle={{ height: 48,width:"100%",padding:0 }}
-          style={{ borderRadius: 8}}
+          labelStyle={{ textAlign: "center", color: "black" }}
+          contentStyle={{ height: 48, width: "100%", padding: 0 }}
+          style={{ borderRadius: 8 }}
           theme={{
             colors: {
               primary: Colors["light"].text,
               outline: Colors["light"].text,
             },
-            roundness:0
+            roundness: 0,
           }}
-          onPress={login}
+          onPress={async () => {
+            try {
+              await GoogleSignin.hasPlayServices();
+              const userInfo = await GoogleSignin.signIn();
+              if (userInfo.data?.idToken) {
+                await login(userInfo.data?.idToken);
+                router.replace("/");
+              } else {
+                throw new Error("no ID token present!");
+              }
+            } catch (error: any) {
+              console.log(error);
+              if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+              } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+              } else if (
+                error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+              ) {
+                // play services not available or outdated
+              } else {
+                // some other error happened
+              }
+            }
+          }}
         >
           Continue with Google
         </Button>
@@ -61,7 +95,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "bold",
-    color:"black",
+    color: "black",
     marginBottom: SIZES.height * 0.05,
   },
 });

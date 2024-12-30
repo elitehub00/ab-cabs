@@ -14,6 +14,7 @@ import { PaperProvider } from "react-native-paper";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import AnimatedSplashScreen from "@/components/SplashScreen";
+import { SessionProvider } from "@/context/ctx";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,18 +39,20 @@ export default function RootLayout() {
 
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <PaperProvider theme={themes}>
-      {isSplashVisible ? (
-        <AnimatedSplashScreen /> // Show animated splash screen
-      ) : (
-        <Slot />
-      )}
-      {/* <Stack>
+    <SessionProvider>
+      <PaperProvider theme={themes}>
+        {isSplashVisible ? (
+          <AnimatedSplashScreen /> // Show animated splash screen
+        ) : (
+          <Slot />
+        )}
+        {/* <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack> */}
-      {/* <StatusBar style="auto" /> */}
-    </PaperProvider>
+        {/* <StatusBar style="auto" /> */}
+      </PaperProvider>
+    </SessionProvider>
     // </ThemeProvider>
   );
 }
