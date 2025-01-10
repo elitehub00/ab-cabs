@@ -1,12 +1,24 @@
-import { View, StyleSheet, Pressable, Image } from "react-native";
+import { View, StyleSheet, Pressable, Image, ScrollView } from "react-native";
 import { Avatar, Text, Button } from "react-native-paper";
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import { Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
+import { SIZES } from "@/constants/Sizes";
+import { useAuth } from "@/context/ctx";
 
 export default function Menu() {
+  const { user, logout } = useAuth();
+  const openLink = async () => {
+    const url = "https://abcabs.ca";
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  };
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -16,16 +28,23 @@ export default function Menu() {
           ),
         }}
       />
-      <View style={styles.contentContainer}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.contentContainer}
+      >
         <View style={styles.profile}>
           <Avatar.Image
             size={80}
-            source={require("@/assets/images/account.png")}
+            source={
+              user?.avatar_url
+                ? { uri: user.avatar_url }
+                : require("@/assets/images/account.png")
+            }
           />
           <View>
-            <Text variant="labelMedium">Ricard Steven G.</Text>
-            <Text variant="bodyMedium">richarsteven90@gmail.com</Text>
-            <Text variant="bodyMedium">Washington D.C, USA</Text>
+            <Text variant="labelMedium">{user?.full_name}</Text>
+            <Text variant="bodyMedium">{user?.email}</Text>
+            <Text variant="bodyMedium">{user?.mobile}</Text>
           </View>
         </View>
         <View style={styles.menu}>
@@ -51,7 +70,7 @@ export default function Menu() {
                   Our Website
                 </Text>
               </View>
-              <Pressable onPress={() => {}} style={styles.button}>
+              <Pressable onPress={openLink} style={styles.button}>
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
@@ -108,10 +127,11 @@ export default function Menu() {
             flexDirection: "row-reverse",
             justifyContent: "space-between",
           }}
+          onPress={logout}
         >
           Log Out
         </Button>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -122,24 +142,24 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    marginHorizontal: 24,
+    marginHorizontal: SIZES.width * 0.05,
   },
   profile: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 16,
-    padding: 24,
+    gap: SIZES.width * 0.03,
+    padding: SIZES.width * 0.05,
     backgroundColor: "rgba(8, 135, 252, 0.1)",
     borderRadius: 8,
-    marginTop: 24,
+    marginTop: SIZES.width * 0.05,
   },
   menu: {
-    marginTop: 24,
-    gap: 16,
+    marginTop: SIZES.width * 0.05,
+    gap: SIZES.width * 0.03,
   },
   menuCard: {
-    padding: 12,
+    padding: SIZES.width * 0.03,
     borderRadius: 8,
     backgroundColor: Colors["light"].background,
     shadowColor: "#171717",
@@ -175,7 +195,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   promotion: {
-    marginVertical: 24,
+    marginVertical: SIZES.width * 0.05,
     borderRadius: 8,
   },
 });

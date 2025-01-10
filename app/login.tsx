@@ -1,15 +1,14 @@
-import { View, StyleSheet, Image } from "react-native";
-import { Text, Button } from "react-native-paper";
-import { SIZES } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { SIZES } from "@/constants/Sizes";
+import { useAuth } from "@/context/ctx";
 import {
   GoogleSignin,
   // GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import { useAuth } from "@/context/ctx";
+import { router } from "expo-router";
+import { Image, StyleSheet, View } from "react-native";
+import { Button, Text } from "react-native-paper";
 
 export default function Login() {
   const { login } = useAuth();

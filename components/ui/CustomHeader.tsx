@@ -1,8 +1,10 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Pressable, TouchableOpacity, View } from "react-native";
+import { Pressable, TouchableOpacity, View, Alert } from "react-native";
 import { Text } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
+import * as Linking from "expo-linking";
+import { useAuth } from "@/context/ctx";
 
 interface CustomHeaderProps {
   title: string;
@@ -11,6 +13,16 @@ interface CustomHeaderProps {
 }
 
 export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
+    const { user } = useAuth();
+  const makePhoneCall = async () => {
+    const phoneNumber = "+1 (142) 455 - 4444";
+
+    if (phoneNumber !== null) {
+      await Linking.openURL(`tel:${phoneNumber}`);
+    } else {
+      Alert.alert("Error", "Phone call is not supported on this device");
+    }
+  };
   return (
     <View
       style={{
@@ -31,7 +43,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               variant="bodyMedium"
               style={{ color: Colors["light"].textAcc }}
             >
-              Hi Sivarathan Sivarajah,
+              Hi {user?.full_name},
             </Text>
           )}
           <Text
@@ -120,7 +132,9 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => {}}
+            onPress={() => {
+              makePhoneCall();
+            }}
           >
             <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
               Call Now
