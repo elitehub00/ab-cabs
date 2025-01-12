@@ -5,6 +5,9 @@ import {
   Pressable,
   ScrollView,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import {
   Text,
@@ -25,7 +28,7 @@ import {
 } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { CustomHeader } from "@/components/ui/CustomHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SIZES } from "@/constants/Sizes";
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -33,6 +36,8 @@ import DateTimePicker, {
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/ctx";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { set } from "date-fns";
+import { FlashList } from "@shopify/flash-list";
 
 const hisArr = [
   { name: "Home", address: "2972 Westheimer Rd." },
@@ -41,6 +46,12 @@ const hisArr = [
   { name: "Shop", address: "2972 Westheimer Rd." },
   { name: "Palace", address: "2972 Westheimer Rd." },
 ];
+
+interface Location {
+  id: number;
+  name: string;
+  location: Record<string, any>;
+}
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -54,10 +65,68 @@ export default function HomeScreen() {
   const [showTimePicker, setShowTimePicker] = useState<boolean>(false);
   const [bookingLoading, setBookingLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [location, setLocation] = useState<string>("");
+  const [showAutocomplete, setShowAutocomplete] = useState<boolean>(false);
+  const [openAutocomplete, setOpenAutocomplete] = useState<string>("");
+  const [from, setFrom] = useState<Record<string, any> | null>(null);
+  const [to, setTo] = useState<Record<string, any> | null>(null);
+
+  const [savedLocations, setSavedLocations] = useState<Location[]>([]);
+  const [locationLoading, setLocationLoading] = useState<boolean>(false);
+  const [visbleAddLocation, setVisbleAddLocation] = useState<boolean>(false);
+  const [locationName, setLocationName] = useState<string>("");
+
+  const [location, setLocation] = useState<Record<string, any> | null>(null);
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = async () => {
+    const { data, error } = await supabase
+      .from("saveLocation")
+      .select("*")
+      .eq("userId", user?.id);
+    if (error) {
+      console.log(error);
+      setSavedLocations([]);
+    } else {
+      setSavedLocations(data);
+    }
+  };
+
+  const addLocation = async () => {
+    if (!locationName) {
+      return showSnack("Please enter a location name.");
+    }
+
+    if (!location) {
+      return showSnack("Please select a location.");
+    }
+    setLocationLoading(true);
+
+    const { error } = await supabase.from("saveLocation").insert({
+      name: locationName,
+      location: location,
+      userId: user?.id,
+    });
+
+    if (error) {
+      console.log(error);
+      showSnack("Failed to add location.");
+      setLocationLoading(false);
+    } else {
+      setVisbleAddLocation(false);
+      setLocationName("");
+      setLocation(null);
+      fetchLocations();
+    }
+  };
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+
+  const showLocationModal = () => setVisbleAddLocation(true);
+  const hideLocationModal = () => setVisbleAddLocation(false);
 
   const showSnack = (message: string) => {
     setSnackMessage(message);
@@ -99,6 +168,16 @@ export default function HomeScreen() {
       return;
     }
 
+    if (!from) {
+      showSnack("Please select a from location.");
+      return;
+    }
+
+    if (!to) {
+      showSnack("Please select a to location.");
+      return;
+    }
+
     if (!user?.full_name || !user?.mobile || !user?.email) {
       showSnack("Please complete your profile.");
 
@@ -117,8 +196,8 @@ export default function HomeScreen() {
       const { error } = await supabase.from("bookings").insert({
         date: combinedDate.toISOString(),
         time: selectedTime.toISOString(), // ISO format for consistency with time zones
-        from: { name: "Home", address: "2972 Westheimer Rd." },
-        to: { name: "Work", address: "2972 Westheimer Rd." },
+        from: from,
+        to: to,
         status: "upcoming",
         userId: user?.id,
       });
@@ -133,6 +212,8 @@ export default function HomeScreen() {
         setSelectedTime(undefined);
         setDate("");
         setTime("");
+        setFrom(null);
+        setTo(null);
         showModal();
       }
     } catch (error) {
@@ -140,6 +221,15 @@ export default function HomeScreen() {
       showSnack("Booking failed. Please try again later.");
       setBookingLoading(false);
     }
+  };
+
+  const showAutocompleteModal = (value: string) => {
+    setOpenAutocomplete(value);
+    setShowAutocomplete(true);
+  };
+  const closeAutocompleteModal = () => {
+    setOpenAutocomplete("");
+    setShowAutocomplete(false);
   };
 
   return (
@@ -154,6 +244,7 @@ export default function HomeScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[styles.container]}
+        keyboardShouldPersistTaps="handled"
       >
         <Card
           mode="contained"
@@ -170,7 +261,10 @@ export default function HomeScreen() {
           />
           <Card.Content style={{ gap: 20 }}>
             {/* From */}
-            <View style={styles.textbox}>
+            <TouchableOpacity
+              style={styles.textbox}
+              onPress={() => showAutocompleteModal("from")}
+            >
               <MaterialIcons
                 name="my-location"
                 size={24}
@@ -180,10 +274,13 @@ export default function HomeScreen() {
                 variant="bodyLarge"
                 style={{ color: Colors["light"].textAcc1 }}
               >
-                From
+                {from ? ` ${from.name}` : "From"}
               </Text>
-            </View>
-            <View style={styles.textbox}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.textbox}
+              onPress={() => showAutocompleteModal("to")}
+            >
               <Ionicons
                 name="location-outline"
                 size={24}
@@ -193,9 +290,9 @@ export default function HomeScreen() {
                 variant="bodyLarge"
                 style={{ color: Colors["light"].textAcc1 }}
               >
-                To
+                {to ? ` ${to.name}` : "To"}
               </Text>
-            </View>
+            </TouchableOpacity>
 
             {/* Pickup Date */}
             <TouchableOpacity
@@ -262,7 +359,7 @@ export default function HomeScreen() {
             labelStyle={{ fontSize: 15 }}
             contentStyle={{ height: 50 }}
             loading={bookingLoading}
-            disabled={date === "" || time === ""}
+            disabled={date === "" || time === "" || !from || !to}
             onPress={book}
           >
             Book Now
@@ -273,25 +370,32 @@ export default function HomeScreen() {
           <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
             Saved Locations
           </Text>
-          <MaterialCommunityIcons name="plus-circle" size={24} color="black" />
+          <Pressable onPress={showLocationModal}>
+            <MaterialCommunityIcons
+              name="plus-circle"
+              size={24}
+              color="black"
+            />
+          </Pressable>
         </View>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           style={{
             marginTop: SIZES.width * 0.05,
             marginBottom: SIZES.width * 0.1,
           }}
         >
-          {hisArr.map((item, index) => (
+          {savedLocations.map((item, index) => (
             <View key={index} style={{ marginRight: 8 }}>
               <View style={styles.cardDefault}>
                 <View style={styles.location}>
                   <Ionicons name="location-outline" size={34} color={"black"} />
                   <View>
                     <Text variant="titleSmall"> {item.name}</Text>
-                    <Text variant="labelSmall"> {item.address}</Text>
+                    <Text variant="labelSmall"> {item.location.name}</Text>
                   </View>
                 </View>
               </View>
@@ -371,6 +475,177 @@ export default function HomeScreen() {
             Done
           </Button>
         </Modal>
+
+        <Modal
+          visible={visbleAddLocation}
+          onDismiss={hideLocationModal}
+          contentContainerStyle={{
+            backgroundColor: "white",
+            margin: SIZES.width * 0.05,
+            padding: SIZES.width * 0.05,
+            borderRadius: 8,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              width: "100%",
+            }}
+          >
+            <IconButton icon="close" size={20} onPress={hideLocationModal} />
+          </View>
+          <View
+            style={{
+              margin: SIZES.width * 0.08,
+              gap: 12,
+            }}
+          >
+            <TextInput
+              mode="flat"
+              label="Location Name"
+              value={locationName}
+              onChangeText={(text) => setLocationName(text)}
+              theme={{
+                colors: { surfaceVariant: Colors["light"].secondary },
+                roundness: 8,
+              }}
+              underlineColor="transparent"
+              activeUnderlineColor="transparent"
+              style={{
+                borderRadius: 8,
+                overflow: "hidden",
+              }}
+            />
+            <Pressable onPress={() => showAutocompleteModal("location")}>
+              <TextInput
+                mode="flat"
+                label="Tap to select a location"
+                // placeholder="Tap to select a location"
+                value={location?.name || ""}
+                editable={false}
+                theme={{
+                  colors: { surfaceVariant: Colors["light"].secondary },
+                  roundness: 8,
+                }}
+                underlineColor="transparent"
+                activeUnderlineColor="transparent"
+                style={{
+                  borderRadius: 8,
+                  overflow: "hidden",
+                }}
+              />
+            </Pressable>
+          </View>
+          <Button
+            mode="contained"
+            theme={{ roundness: 0 }}
+            style={{ borderRadius: 8 }}
+            dark
+            textColor="white"
+            labelStyle={{ fontSize: 15 }}
+            contentStyle={{ height: 40 }}
+            loading={locationLoading}
+            onPress={addLocation}
+          >
+            Add
+          </Button>
+        </Modal>
+
+        <Modal
+          visible={showAutocomplete}
+          onDismiss={() => closeAutocompleteModal()}
+          contentContainerStyle={styles.modalContainer}
+        >
+          <IconButton
+            icon="close"
+            size={16}
+            onPress={() => closeAutocompleteModal()}
+            style={styles.closeButton}
+          />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            style={styles.autocompleteContainer}
+          >
+            <GooglePlacesAutocomplete
+              placeholder="Search for a location"
+              fetchDetails={true}
+              enablePoweredByContainer={false}
+              onPress={(data, details = null) => {
+                if (openAutocomplete === "from") {
+                  setFrom(details);
+                } else if (openAutocomplete === "to") {
+                  setTo(details);
+                } else {
+                  setLocation(details);
+                }
+                closeAutocompleteModal();
+              }}
+              onFail={(error) => {
+                console.log(error);
+              }}
+              query={{
+                key: "AIzaSyD-JggDDP0b4KRJSpCTeWRlou2OhzaBh94",
+                language: "en",
+                components: "country:ca",
+              }}
+              styles={{
+                container: {
+                  flex: 0,
+                },
+                textInput: styles.autocompleteInput,
+                listView: styles.autocompleteListView,
+              }}
+            />
+
+            {(openAutocomplete === "from" || openAutocomplete === "to") && (
+              <FlashList
+                data={savedLocations}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => {
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        if (openAutocomplete === "from") {
+                          setFrom(item.location);
+                        } else if (openAutocomplete === "to") {
+                          setTo(item.location);
+                        }
+                        closeAutocompleteModal();
+                      }}
+                    >
+                      <View key={item.id} style={{ marginRight: 8 }}>
+                        <View style={styles.cardDefault1}>
+                          <View style={styles.location}>
+                            <Ionicons
+                              name="location-outline"
+                              size={34}
+                              color={"black"}
+                            />
+                            <View>
+                              <Text variant="titleSmall"> {item.name}</Text>
+                              <Text variant="labelSmall">
+                                {" "}
+                                {item.location?.name}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </Pressable>
+                  );
+                }}
+                estimatedItemSize={300}
+                ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+                contentContainerStyle={{
+                  paddingHorizontal: SIZES.width * 0.05,
+                  paddingTop: SIZES.height * 0.02,
+                }}
+                ListEmptyComponent={<Text>No locations found</Text>}
+              />
+            )}
+          </KeyboardAvoidingView>
+        </Modal>
       </Portal>
     </View>
   );
@@ -405,12 +680,78 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     width: SIZES.width * 0.5,
-    height: 80,
+    height: SIZES.width * 0.16,
+  },
+  cardDefault1: {
+    backgroundColor: Colors["light"].background,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    borderColor: Colors["light"].accent,
+    borderWidth: 1,
+    borderRadius: 8,
+    // width: SIZES.width * 1,
+    height: SIZES.width * 0.12,
   },
   location: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-start",
+    paddingTop: SIZES.height * 0.1, // Adjust modal offset
+  },
+  closeButton: {
+    position: "absolute",
+    top: SIZES.height * 0.02,
+    right: SIZES.width * 0.04,
+    zIndex: 10,
+    backgroundColor: "white",
+    borderRadius: 50,
+    padding: SIZES.width * 0.02,
+    elevation: 5, // Shadow for Android
+  },
+  autocompleteContainer: {
+    // paddingHorizontal: SIZES.width * 0.05,
+    // paddingTop:SIZES.height * 0.02,
+    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 8,
+    marginHorizontal: SIZES.width * 0.05,
+    elevation: 10,
+    maxHeight: SIZES.height * 0.5,
+  },
+  autocompleteInput: {
+    height:
+      Platform.OS === "android" ? SIZES.height * 0.05 : SIZES.height * 0.05,
+    fontSize: SIZES.width * 0.03,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+    // paddingHorizontal: SIZES.width * 0.03,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    // marginBottom: SIZES.height * 0.02,
+  },
+  autocompleteListView: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    elevation: 5,
+    // marginTop: SIZES.height * 0.01,
+    overflow: "hidden",
+    // maxHeight: SIZES.height * 0.4,
+  },
+  autocompleteRow: {
+    paddingVertical: SIZES.height * 0.015,
+    paddingHorizontal: SIZES.width * 0.04,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  autocompleteRowText: {
+    fontSize: SIZES.width * 0.045,
+    color: "#333",
   },
 });

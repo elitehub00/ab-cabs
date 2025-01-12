@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/ctx";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, set } from "date-fns";
 import { useIsFocused } from "@react-navigation/native";
 
 interface Booking {
@@ -42,10 +42,12 @@ export default function TabTwoScreen() {
   const [value, setValue] = useState("upcoming");
   const [data, setData] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [completeLoading, setCompleteLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [value,isFocused]);
+  }, [value, isFocused]);
 
   const formatTime = (dateTime: string) => {
     const date = parseISO(dateTime);
@@ -76,6 +78,7 @@ export default function TabTwoScreen() {
   };
 
   const completeRide = async (id: string) => {
+    setCompleteLoading(true);
     try {
       const { error } = await supabase
         .from("bookings")
@@ -86,8 +89,11 @@ export default function TabTwoScreen() {
 
       if (error) {
         console.log(error);
+        setCompleteLoading(false);
       } else {
         fetchData();
+        setCompleteLoading(false);
+        setValue("gone");
       }
     } catch (error) {
       console.log(error);
@@ -95,6 +101,7 @@ export default function TabTwoScreen() {
   };
 
   const cancelRide = async (id: string) => {
+    setCancelLoading(true);
     try {
       const { error } = await supabase
         .from("bookings")
@@ -105,32 +112,17 @@ export default function TabTwoScreen() {
 
       if (error) {
         console.log(error);
+        setCancelLoading(false);
       } else {
         fetchData();
+        setCancelLoading(false);
+        setValue("cancelled");
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const saveRide = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from("bookings")
-        .update({
-          status: "saved",
-        })
-        .eq("id", id);
-
-      if (error) {
-        console.log(error);
-      } else {
-        fetchData();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <View style={styles.container}>
       <Tabs.Screen
@@ -296,18 +288,38 @@ export default function TabTwoScreen() {
                       </View>
                     </View>
                     <View style={styles.cardBottom}>
-                      <Text
+                      {/* <Text
                         variant="labelLarge"
                         style={{ fontWeight: "bold", color: "red" }}
                       >
                         {item.status === "upcoming" && " Cancel Ride"}
-                      </Text>
-                      <Text
+                      </Text> */}
+                      {item.status === "upcoming" && (
+                        <Button
+                          mode="text"
+                          theme={{ colors: { primary: "red" } }}
+                          loading={cancelLoading}
+                          onPress={() => cancelRide(item.id)}
+                        >
+                          Cancel Ride
+                        </Button>
+                      )}
+                      {item.status === "upcoming" && (
+                        <Button
+                          mode="text"
+                          //  theme={{ colors: { primary: "red" } }}
+                          loading={completeLoading}
+                          onPress={() => completeRide(item.id)}
+                        >
+                          Completed
+                        </Button>
+                      )}
+                      {/* <Text
                         variant="labelLarge"
                         style={{ color: Colors["light"].primary }}
                       >
-                        {item.status === "upcoming" ? "Completed" : "Save"}
-                      </Text>
+                        {item.status === "upcoming" ? "Completed" : "Use"}
+                      </Text> */}
                     </View>
                   </Card.Content>
                 </Card>
