@@ -185,7 +185,7 @@ export default function Promotion() {
                       {item.userPromotion[0]?.userId.id === user?.id ? (
                         <Text
                           variant="labelLarge"
-                          style={{ fontWeight: "bold", color: "red",padding:10 }}
+                          style={{ fontWeight: "bold", color: "orange",padding:10 }}
                         >
                           Used
                         </Text>

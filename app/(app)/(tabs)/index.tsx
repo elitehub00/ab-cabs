@@ -18,6 +18,8 @@ import {
   Portal,
   IconButton,
   TextInput,
+  Dialog,
+  HelperText,
 } from "react-native-paper";
 import { router, Tabs } from "expo-router";
 import {
@@ -38,6 +40,7 @@ import { useAuth } from "@/context/ctx";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { set } from "date-fns";
 import { FlashList } from "@shopify/flash-list";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const hisArr = [
   { name: "Home", address: "2972 Westheimer Rd." },
@@ -54,7 +57,8 @@ interface Location {
 }
 
 export default function HomeScreen() {
-  const { user } = useAuth();
+  const { user, setupUser } = useAuth();
+
   const [visibleSnack, setVisibleSnack] = useState<boolean>(false);
   const [snackMessage, setSnackMessage] = useState<string>("");
   const [date, setDate] = useState<string>("");
@@ -77,9 +81,29 @@ export default function HomeScreen() {
 
   const [location, setLocation] = useState<Record<string, any> | null>(null);
 
+  const [visibleDialog, setVisibleDialog] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState("");
+  const [phoneLoading, setPhoneLoading] = useState(false);
+
   useEffect(() => {
     fetchLocations();
+    checkProfileCompletion();
   }, []);
+
+  const checkProfileCompletion = async () => {
+    const hasCompletedProfile = await AsyncStorage.getItem(
+      "hasCompletedProfile"
+    );
+
+    if (!hasCompletedProfile) {
+      if (!user?.full_name || !user?.mobile || !user?.email) {
+        setVisibleDialog(true);
+      } else {
+        await AsyncStorage.setItem("hasCompletedProfile", "true");
+      }
+    }
+  };
 
   const fetchLocations = async () => {
     const { data, error } = await supabase
@@ -92,6 +116,11 @@ export default function HomeScreen() {
     } else {
       setSavedLocations(data);
     }
+  };
+
+  const closeModel = async () => {
+    await AsyncStorage.setItem("hasCompletedProfile", "true");
+    setVisibleDialog(false);
   };
 
   const addLocation = async () => {
@@ -184,6 +213,7 @@ export default function HomeScreen() {
       setTimeout(() => {
         router.push("/(app)/(tabs)/account");
       }, 1000);
+      return;
     }
 
     setBookingLoading(true);
@@ -230,6 +260,37 @@ export default function HomeScreen() {
   const closeAutocompleteModal = () => {
     setOpenAutocomplete("");
     setShowAutocomplete(false);
+  };
+
+  const validatePhoneNumber = (number: string) => {
+    const canadianPhoneRegex = /^\+1\s?\d{3}[-\s]?\d{3}[-\s]?\d{4}$/;
+    if (!canadianPhoneRegex.test(number)) {
+      setError("Please enter a valid Canadian phone number.");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
+  const handleSave = async () => {
+    if (validatePhoneNumber(phoneNumber)) {
+      setPhoneLoading(true);
+      const { data, error } = await supabase
+        .from("profiles")
+        .update({ mobile: phoneNumber })
+        .eq("id", user?.id)
+        .select();
+
+      if (error) {
+        console.log(error);
+        showSnack("Some error occured");
+        setPhoneLoading(false);
+      } else {
+        setupUser(data);
+        setPhoneLoading(false);
+      }
+      closeModel();
+    }
   };
 
   return (
@@ -406,6 +467,7 @@ export default function HomeScreen() {
       <Snackbar
         visible={visibleSnack}
         onDismiss={onDismissSnackBar}
+        theme={{ colors: { onSurface: Colors.light.primary } }}
         action={{
           label: "",
           icon: "close",
@@ -559,7 +621,7 @@ export default function HomeScreen() {
         >
           <IconButton
             icon="close"
-            size={16}
+            size={20}
             onPress={() => closeAutocompleteModal()}
             style={styles.closeButton}
           />
@@ -641,11 +703,43 @@ export default function HomeScreen() {
                   paddingHorizontal: SIZES.width * 0.05,
                   paddingTop: SIZES.height * 0.02,
                 }}
-                ListEmptyComponent={<Text>No locations found</Text>}
+                ListEmptyComponent={<Text>No saved locations</Text>}
               />
             )}
           </KeyboardAvoidingView>
         </Modal>
+
+        <Dialog
+          visible={visibleDialog}
+          onDismiss={closeModel}
+          theme={{ colors: { elevation: { level3: Colors.light.background } } }}
+        >
+          <Dialog.Title>Enter Your Phone Number</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+              Phone number
+            </Text>
+            <TextInput
+              // label="Phone Number"
+              value={phoneNumber}
+              onChangeText={(text) => setPhoneNumber(text)}
+              keyboardType="phone-pad"
+              placeholder="+1 xxx-xxx-xxxx"
+              mode="outlined"
+              autoComplete="tel"
+              // onBlur={() => validatePhoneNumber(phoneNumber)}
+            />
+            <HelperText type="error" visible={!!error}>
+              {error}
+            </HelperText>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={closeModel}>Skip</Button>
+            <Button onPress={handleSave} loading={phoneLoading}>
+              Save
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </View>
   );
@@ -701,7 +795,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: Colors.light.background,
     justifyContent: "flex-start",
     paddingTop: SIZES.height * 0.1, // Adjust modal offset
   },
@@ -710,20 +804,20 @@ const styles = StyleSheet.create({
     top: SIZES.height * 0.02,
     right: SIZES.width * 0.04,
     zIndex: 10,
-    backgroundColor: "white",
-    borderRadius: 50,
-    padding: SIZES.width * 0.02,
+    // backgroundColor: "white",
+    // borderRadius: 50,
+    // padding: SIZES.width * 0.02,
     elevation: 5, // Shadow for Android
   },
   autocompleteContainer: {
     // paddingHorizontal: SIZES.width * 0.05,
     // paddingTop:SIZES.height * 0.02,
     flex: 1,
-    backgroundColor: "white",
-    borderRadius: 8,
+    // backgroundColor: "white",
+    // borderRadius: 8,
     marginHorizontal: SIZES.width * 0.05,
-    elevation: 10,
-    maxHeight: SIZES.height * 0.5,
+    // elevation: 10,
+    // maxHeight: SIZES.height * 0.5,
   },
   autocompleteInput: {
     height:
@@ -740,15 +834,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     elevation: 5,
-    // marginTop: SIZES.height * 0.01,
+    marginTop: SIZES.height * 0.01,
     overflow: "hidden",
-    // maxHeight: SIZES.height * 0.4,
+    maxHeight: SIZES.height * 0.4,
   },
   autocompleteRow: {
     paddingVertical: SIZES.height * 0.015,
     paddingHorizontal: SIZES.width * 0.04,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
+    
   },
   autocompleteRowText: {
     fontSize: SIZES.width * 0.045,

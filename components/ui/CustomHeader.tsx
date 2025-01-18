@@ -126,7 +126,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
           </View>
           <Pressable
             style={{
-              backgroundColor: "black",
+              backgroundColor: Colors.light.primary,
               borderRadius: 12,
               paddingHorizontal: 8,
               justifyContent: "center",
