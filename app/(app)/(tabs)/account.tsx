@@ -318,6 +318,7 @@ export default function Account() {
                     value={values.email}
                     onChangeText={handleChange("email")}
                     onBlur={handleBlur("email")}
+                    editable={false}
                     theme={{
                       colors: { surfaceVariant: Colors["light"].background },
                       roundness: 8,

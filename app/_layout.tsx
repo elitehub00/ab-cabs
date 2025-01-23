@@ -15,6 +15,7 @@ import { PaperProvider } from "react-native-paper";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import AnimatedSplashScreen from "@/components/SplashScreen";
 import { SessionProvider } from "@/context/ctx";
+import 'react-native-get-random-values'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
