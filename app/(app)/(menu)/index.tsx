@@ -52,7 +52,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="info" size={32} color="black" />
-                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
+                <Text  variant="labelMedium" style={styles.menuText}>
                   About Us
                 </Text>
               </View>
@@ -66,7 +66,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="globe" size={32} color="black" />
-                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={styles.menuText}>
                   Our Website
                 </Text>
               </View>
@@ -80,7 +80,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="star" size={32} color="black" />
-                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={styles.menuText}>
                   Refer a friend / Redeem invitation code
                 </Text>
               </View>
@@ -94,7 +94,7 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="help-circle" size={32} color="black" />
-                <Text variant="labelMedium" style={{ fontWeight: "bold" }}>
+                <Text variant="labelMedium" style={styles.menuText}>
                   Help and Support
                 </Text>
               </View>
@@ -181,6 +181,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 8,
+    flex: 1, // Ensures the left content takes available space
+  },
+  menuText: {
+    flexWrap: "wrap", // Wrap text to the next line if necessary
+    maxWidth: "80%", // Limit the text width to 80% of the container
+    flexShrink: 1, // Allow text to shrink if needed
+    fontWeight: "bold",
   },
   button: {
     padding: 4,

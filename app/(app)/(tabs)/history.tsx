@@ -304,7 +304,7 @@ export default function TabTwoScreen() {
                           Cancel Ride
                         </Button>
                       )}
-                      {item.status === "upcoming" && (
+                      {/* {item.status === "upcoming" && (
                         <Button
                           mode="text"
                           //  theme={{ colors: { primary: "red" } }}
@@ -313,7 +313,7 @@ export default function TabTwoScreen() {
                         >
                           Completed
                         </Button>
-                      )}
+                      )} */}
                       {/* <Text
                         variant="labelLarge"
                         style={{ color: Colors["light"].primary }}

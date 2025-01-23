@@ -30,7 +30,7 @@ import {
 } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { CustomHeader } from "@/components/ui/CustomHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { SIZES } from "@/constants/Sizes";
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -41,6 +41,12 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { set } from "date-fns";
 import { FlashList } from "@shopify/flash-list";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MapView, {
+  Marker,
+  Region,
+  LatLng,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 
 const hisArr = [
   { name: "Home", address: "2972 Westheimer Rd." },
@@ -55,9 +61,16 @@ interface Location {
   name: string;
   location: Record<string, any>;
 }
+interface LocationDetails {
+  name?: string;
+  address?: string;
+  latitude: number;
+  longitude: number;
+}
 
 export default function HomeScreen() {
   const { user, setupUser } = useAuth();
+  const autocompleteRef = useRef<any>(null);
 
   const [visibleSnack, setVisibleSnack] = useState<boolean>(false);
   const [snackMessage, setSnackMessage] = useState<string>("");
@@ -85,6 +98,8 @@ export default function HomeScreen() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [phoneLoading, setPhoneLoading] = useState(false);
+  const [mapRegion, setMapRegion] = useState<Region | null>(null); // Initial state for the map region
+  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
 
   useEffect(() => {
     fetchLocations();
@@ -150,6 +165,13 @@ export default function HomeScreen() {
       fetchLocations();
     }
   };
+  // useEffect(() => {
+  //   if (showAutocomplete && autocompleteRef.current) {
+  //     setTimeout(() => {
+  //       autocompleteRef.current?.focus();
+  //     }, 1000);
+  //   }
+  // }, [showAutocomplete]);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -192,10 +214,11 @@ export default function HomeScreen() {
   };
 
   const book = async () => {
-    if (!selectedDate || !selectedTime) {
-      showSnack("Please select both date and time.");
-      return;
-    }
+    const fallbackDate = new Date();
+    const fallbackTime = new Date();
+
+    const finalDate = selectedDate || fallbackDate;
+    const finalTime = selectedTime || fallbackTime;
 
     if (!from) {
       showSnack("Please select a from location.");
@@ -219,13 +242,13 @@ export default function HomeScreen() {
     setBookingLoading(true);
     try {
       // Combine the selected date and time
-      const combinedDate = new Date(selectedDate);
-      combinedDate.setHours(selectedTime.getHours());
-      combinedDate.setMinutes(selectedTime.getMinutes());
+      const combinedDate = new Date(finalDate);
+      combinedDate.setHours(finalTime.getHours());
+      combinedDate.setMinutes(finalTime.getMinutes());
 
       const { error } = await supabase.from("bookings").insert({
         date: combinedDate.toISOString(),
-        time: selectedTime.toISOString(), // ISO format for consistency with time zones
+        time: finalTime.toISOString(), // ISO format for consistency with time zones
         from: from,
         to: to,
         status: "upcoming",
@@ -254,12 +277,32 @@ export default function HomeScreen() {
   };
 
   const showAutocompleteModal = (value: string) => {
+    setTimeout(() => {
+      autocompleteRef.current?.focus();
+    }, 1000);
     setOpenAutocomplete(value);
     setShowAutocomplete(true);
   };
   const closeAutocompleteModal = () => {
     setOpenAutocomplete("");
     setShowAutocomplete(false);
+    setMarkerPosition(null);
+    setMapRegion(null);
+  };
+
+  const closeAutocompleteModalButton = () => {
+    setOpenAutocomplete("");
+    setShowAutocomplete(false);
+    setMarkerPosition(null);
+    setMapRegion(null);
+
+    if (openAutocomplete === "from") {
+      setFrom(null);
+    } else if (openAutocomplete === "to") {
+      setTo(null);
+    } else {
+      setLocation(null);
+    }
   };
 
   const validatePhoneNumber = (number: string) => {
@@ -369,7 +412,7 @@ export default function HomeScreen() {
                 variant="bodyLarge"
                 style={{ color: Colors["light"].textAcc1 }}
               >
-                Pickup Date: {date || "Select a date"}
+                Pickup Date: {date || "today"}
               </Text>
             </TouchableOpacity>
             {showDatePicker && (
@@ -396,7 +439,7 @@ export default function HomeScreen() {
                 variant="bodyLarge"
                 style={{ color: Colors["light"].textAcc1 }}
               >
-                Pickup Time: {time || "Select a time"}
+                Pickup Time: {time || "now"}
               </Text>
             </TouchableOpacity>
             {showTimePicker && (
@@ -420,7 +463,7 @@ export default function HomeScreen() {
             labelStyle={{ fontSize: 15 }}
             contentStyle={{ height: 50 }}
             loading={bookingLoading}
-            disabled={date === "" || time === "" || !from || !to}
+            disabled={!from || !to}
             onPress={book}
           >
             Book Now
@@ -622,7 +665,7 @@ export default function HomeScreen() {
           <IconButton
             icon="close"
             size={20}
-            onPress={() => closeAutocompleteModal()}
+            onPress={() => closeAutocompleteModalButton()}
             style={styles.closeButton}
           />
           <KeyboardAvoidingView
@@ -630,18 +673,30 @@ export default function HomeScreen() {
             style={styles.autocompleteContainer}
           >
             <GooglePlacesAutocomplete
+              ref={autocompleteRef}
               placeholder="Search for a location"
               fetchDetails={true}
               enablePoweredByContainer={false}
               onPress={(data, details = null) => {
-                if (openAutocomplete === "from") {
-                  setFrom(details);
-                } else if (openAutocomplete === "to") {
-                  setTo(details);
-                } else {
-                  setLocation(details);
+                if (details?.geometry?.location) {
+                  const { lat, lng } = details.geometry.location;
+                  setMarkerPosition({ latitude: lat, longitude: lng });
+                  setMapRegion({
+                    latitude: lat,
+                    longitude: lng,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                  });
+
+                  if (openAutocomplete === "from") {
+                    setFrom(details);
+                  } else if (openAutocomplete === "to") {
+                    setTo(details);
+                  } else {
+                    setLocation(details);
+                  }
+                  // closeAutocompleteModal();
                 }
-                closeAutocompleteModal();
               }}
               onFail={(error) => {
                 console.log(error);
@@ -668,12 +723,20 @@ export default function HomeScreen() {
                   return (
                     <Pressable
                       onPress={() => {
+                        const { lat, lng } = item.location.geometry.location;
+                        setMarkerPosition({ latitude: lat, longitude: lng });
+                        setMapRegion({
+                          latitude: lat,
+                          longitude: lng,
+                          latitudeDelta: 0.01,
+                          longitudeDelta: 0.01,
+                        });
                         if (openAutocomplete === "from") {
                           setFrom(item.location);
                         } else if (openAutocomplete === "to") {
                           setTo(item.location);
                         }
-                        closeAutocompleteModal();
+                        // closeAutocompleteModal();
                       }}
                     >
                       <View key={item.id} style={{ marginRight: 8 }}>
@@ -706,6 +769,28 @@ export default function HomeScreen() {
                 ListEmptyComponent={<Text>No saved locations</Text>}
               />
             )}
+            {markerPosition && (
+              <View style={styles.mapContainer}>
+                <MapView
+                  style={StyleSheet.absoluteFillObject} // Ensures the map fills its container
+                  region={mapRegion || undefined}
+                  provider={PROVIDER_GOOGLE}
+                >
+                  <Marker coordinate={markerPosition} />
+                </MapView>
+              </View>
+            )}
+            <Button
+              mode="contained"
+              onPress={() => {
+                closeAutocompleteModal();
+                // showSnack("Location selected!");
+              }}
+              style={{ marginVertical: SIZES.width * 0.05 }}
+              disabled={!markerPosition} // Disable until a location is selected
+            >
+              Confirm Location
+            </Button>
           </KeyboardAvoidingView>
         </Modal>
 
@@ -797,27 +882,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.light.background,
     justifyContent: "flex-start",
-    paddingTop: SIZES.height * 0.1, // Adjust modal offset
+    paddingTop: SIZES.height * 0.1,
   },
   closeButton: {
     position: "absolute",
     top: SIZES.height * 0.02,
     right: SIZES.width * 0.04,
     zIndex: 10,
-    // backgroundColor: "white",
-    // borderRadius: 50,
-    // padding: SIZES.width * 0.02,
     elevation: 5, // Shadow for Android
   },
   autocompleteContainer: {
-    // paddingHorizontal: SIZES.width * 0.05,
-    // paddingTop:SIZES.height * 0.02,
-    flex: 1,
-    // backgroundColor: "white",
-    // borderRadius: 8,
+    flexGrow: 1,
     marginHorizontal: SIZES.width * 0.05,
-    // elevation: 10,
-    // maxHeight: SIZES.height * 0.5,
   },
   autocompleteInput: {
     height:
@@ -825,10 +901,8 @@ const styles = StyleSheet.create({
     fontSize: SIZES.width * 0.03,
     backgroundColor: "#f9f9f9",
     borderRadius: 8,
-    // paddingHorizontal: SIZES.width * 0.03,
     borderWidth: 1,
     borderColor: "#ddd",
-    // marginBottom: SIZES.height * 0.02,
   },
   autocompleteListView: {
     backgroundColor: "#fff",
@@ -843,10 +917,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.width * 0.04,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
-    
   },
   autocompleteRowText: {
     fontSize: SIZES.width * 0.045,
     color: "#333",
+  },
+  mapContainer: {
+    width: "100%", // Takes the full width of the parent container
+    height: SIZES.height * 0.6, // Set height relative to screen size
+    borderRadius: 10,
+    overflow: "hidden", // Ensures the map stays within the container bounds
+    marginTop: 20,
+    backgroundColor: Colors["light"].background,
   },
 });

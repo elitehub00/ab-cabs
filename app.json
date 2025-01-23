@@ -22,7 +22,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.abcabs.abcabs"
+      "package": "com.abcabs.abcabs",
+      "config": {
+        "googleMaps":{
+          "apiKey":"AIzaSyD-JggDDP0b4KRJSpCTeWRlou2OhzaBh94"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
