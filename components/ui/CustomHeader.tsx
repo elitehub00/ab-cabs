@@ -15,7 +15,7 @@ interface CustomHeaderProps {
 export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
     const { user } = useAuth();
   const makePhoneCall = async () => {
-    const phoneNumber = "+1 (142) 455 - 4444";
+    const phoneNumber = "+1 (403) 634 - 4373";
 
     if (phoneNumber !== null) {
       await Linking.openURL(`tel:${phoneNumber}`);
@@ -43,7 +43,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               variant="bodyMedium"
               style={{ color: Colors["light"].textAcc }}
             >
-              Hi {user?.full_name},
+              Hi {user?.full_name.split(" ")[0]},
             </Text>
           )}
           <Text
@@ -121,7 +121,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               variant="titleMedium"
               style={{ fontWeight: "bold", color: "black" }}
             >
-              {"+1 (142) 455 - 4444"}
+              {"+1 (403) 634 - 4373"}
             </Text>
           </View>
           <Pressable

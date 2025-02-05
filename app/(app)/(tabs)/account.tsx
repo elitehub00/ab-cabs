@@ -287,8 +287,15 @@ export default function Account() {
                     placeholder="+1 (XXX) XXX-XXXX"
                     placeholderTextColor={Colors["light"].textAcc1}
                     inputMode="tel"
-                    value={values.phone}
-                    onChangeText={handleChange("phone")}
+                    value={values.phone || "+1"} // Default to +1 if empty
+                    onChangeText={(text) => {
+                      if (!text.startsWith("+1")) {
+                        text = "+1" + text.replace(/[^0-9]/g, ""); // Ensure only numbers
+                      } else {
+                        text = "+1" + text.slice(2).replace(/[^0-9]/g, ""); // Keep +1 and allow numbers
+                      }
+                      setFieldValue("phone", text);
+                    }}
                     onBlur={handleBlur("phone")}
                     theme={{
                       colors: { surfaceVariant: Colors["light"].background },
@@ -301,7 +308,9 @@ export default function Account() {
                       overflow: "hidden",
                     }}
                     error={touched.phone && !!errors.phone}
+                    editable={true} // Users can type after +1
                   />
+
                   {touched.phone && errors.phone && (
                     <Text style={styles.errorText}>{errors.phone}</Text>
                   )}

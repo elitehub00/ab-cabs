@@ -14,14 +14,14 @@ export default function OnBoarding() {
       backgroundColor: Colors["light"].secondary,
       image: (
         <Image
-          source={require("../assets/images/on1.png")}
+          source={require("../assets/images/11.png")}
           style={styles.img}
         />
       ),
       title: (
         <View style={{ marginTop: SIZES.height * 0.01 }}>
           <Text variant="titleMedium" style={styles.subHead}>
-            Welcome to Rideshare
+            Welcome to AB Cabs
           </Text>
           <Text variant="headlineLarge" style={styles.title}>
             Anywhere you are
@@ -39,7 +39,7 @@ export default function OnBoarding() {
       backgroundColor: Colors["light"].secondary,
       image: (
         <Image
-          source={require("../assets/images/on2.png")}
+          source={require("../assets/images/22.png")}
           style={styles.img}
         />
       ),
@@ -64,7 +64,7 @@ export default function OnBoarding() {
       backgroundColor: Colors["light"].secondary,
       image: (
         <Image
-          source={require("../assets/images/on3.png")}
+          source={require("../assets/images/33.png")}
           style={styles.img}
         />
       ),
