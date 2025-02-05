@@ -22,6 +22,7 @@ export default function HomeLayout() {
     >
       {/* Optionally configure static options outside the route.*/}
       <Stack.Screen name="index" options={{ headerTitle: "" }} />
+      <Stack.Screen name="about" options={{ headerTitle: "" }} />
     </Stack>
   );
 }

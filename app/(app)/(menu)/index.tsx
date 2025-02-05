@@ -1,9 +1,9 @@
 import { View, StyleSheet, Pressable, Image, ScrollView } from "react-native";
 import { Avatar, Text, Button } from "react-native-paper";
 import { CustomHeader } from "@/components/ui/CustomHeader";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { SIZES } from "@/constants/Sizes";
@@ -11,14 +11,15 @@ import { useAuth } from "@/context/ctx";
 
 export default function Menu() {
   const { user, logout } = useAuth();
-  const openLink = async () => {
-    const url = "https://abcabs.ca";
-    const supported = await Linking.canOpenURL(url);
-
-    if (supported) {
+  const openLink = async (url: string) => {
+    try {
       await Linking.openURL(url);
+    } catch (error) {
+      console.error("Error opening URL:", error);
     }
   };
+
+  
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -52,11 +53,11 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="info" size={32} color="black" />
-                <Text  variant="labelMedium" style={styles.menuText}>
+                <Text variant="labelMedium" style={styles.menuText}>
                   About Us
                 </Text>
               </View>
-              <Pressable onPress={() => {}} style={styles.button}>
+              <Pressable onPress={() => {router.push("/(app)/(menu)/about")}} style={styles.button}>
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
@@ -70,13 +71,18 @@ export default function Menu() {
                   Our Website
                 </Text>
               </View>
-              <Pressable onPress={openLink} style={styles.button}>
+              <Pressable
+                onPress={() => {
+                  openLink("https://abcabs.ca");
+                }}
+                style={styles.button}
+              >
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
           </View>
-          <View style={styles.menuCard}>
+          {/* <View style={styles.menuCard}>
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="star" size={32} color="black" />
@@ -87,10 +93,9 @@ export default function Menu() {
               <Pressable onPress={() => {}} style={styles.button}>
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
-          <View style={styles.menuCard}>
+          </View> */}
+          {/* <View style={styles.menuCard}>
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="help-circle" size={32} color="black" />
@@ -99,6 +104,66 @@ export default function Menu() {
                 </Text>
               </View>
               <Pressable onPress={() => {}} style={styles.button}>
+                <Feather name="chevron-right" size={24} color="black" />
+              </Pressable>
+            </View>
+          </View> */}
+          <View style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuLeft}>
+                <Feather name="youtube" size={32} color="black" />
+                <Text variant="labelMedium" style={styles.menuText}>
+                  Youtube
+                </Text>
+              </View>
+              <Pressable
+                onPress={() => {
+                  openLink("https://www.youtube.com/@abcabs-2024");
+                }}
+                style={styles.button}
+              >
+                <Feather name="chevron-right" size={24} color="black" />
+              </Pressable>
+              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+            </View>
+          </View>
+          <View style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuLeft}>
+                <Feather name="facebook" size={32} color="black" />
+                <Text variant="labelMedium" style={styles.menuText}>
+                  Facebook
+                </Text>
+              </View>
+              <Pressable
+                onPress={() => {
+                  openLink(
+                    "https://www.facebook.com/profile.php?id=61566862439428&mibextid=ZbWKwL"
+                  );
+                }}
+                style={styles.button}
+              >
+                <Feather name="chevron-right" size={24} color="black" />
+              </Pressable>
+              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+            </View>
+          </View>
+          <View style={styles.menuCard}>
+            <View style={styles.menuRow}>
+              <View style={styles.menuLeft}>
+                <MaterialIcons name="tiktok" size={32} color="black" />
+                <Text variant="labelMedium" style={styles.menuText}>
+                  TikTok
+                </Text>
+              </View>
+              <Pressable
+                onPress={() => {
+                  openLink(
+                    "https://www.tiktok.com/@ab_cabs_/video/7435130896346320183?_t=8rVzswQRyIq&_r=1"
+                  );
+                }}
+                style={styles.button}
+              >
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
@@ -143,6 +208,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     marginHorizontal: SIZES.width * 0.05,
+    marginVertical: SIZES.width * 0.05,
   },
   profile: {
     flexDirection: "row",

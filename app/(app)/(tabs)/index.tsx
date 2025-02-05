@@ -7,7 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
+  ImageBackground,
 } from "react-native";
 import {
   Text,
@@ -20,6 +20,7 @@ import {
   TextInput,
   Dialog,
   HelperText,
+  Avatar,
 } from "react-native-paper";
 import { router, Tabs } from "expo-router";
 import {
@@ -41,6 +42,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { set } from "date-fns";
 import { FlashList } from "@shopify/flash-list";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 import MapView, {
   Marker,
   Region,
@@ -213,6 +215,14 @@ export default function HomeScreen() {
     setShowTimePicker(false);
   };
 
+  const openLink = async (url: string) => {
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      console.error("Error opening URL:", error);
+    }
+  };
+
   const book = async () => {
     const fallbackDate = new Date();
     const fallbackTime = new Date();
@@ -337,7 +347,11 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors["light"].secondary }}>
+    <View
+      style={{ flex: 1 }}
+      // source={require("@/assets/images/bc.jpg")}
+      // resizeMode="cover"
+    >
       <Tabs.Screen
         options={{
           header: () => (
@@ -350,6 +364,61 @@ export default function HomeScreen() {
         style={[styles.container]}
         keyboardShouldPersistTaps="handled"
       >
+        <View
+          style={{
+            marginBottom: SIZES.width * 0.05,
+            borderRadius: 12,
+            backgroundColor: Colors["light"].background,
+            // shadowColor: "#171717",
+            // shadowOffset: { width: 4, height: 4 },
+            // shadowOpacity: 0.3,
+            // shadowRadius: 5,
+            // borderWidth: 1,
+            // borderColor: "#E0E0E0",
+            // elevation: 8,
+            padding: 12,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <Avatar.Image
+              size={40}
+              source={require("@/assets/images/icon.png")}
+            />
+
+            <Text
+              variant="titleMedium"
+              style={{ fontWeight: "bold", color: "black" }}
+            >
+              {"Add a Google review"}
+            </Text>
+          </View>
+          <Pressable
+            style={{
+              backgroundColor: Colors.light.primary,
+              borderRadius: 12,
+              paddingHorizontal: 8,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              openLink("https://g.co/kgs/kawkbaa");
+            }}
+          >
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+              Review
+            </Text>
+          </Pressable>
+        </View>
+
         <Card
           mode="contained"
           contentStyle={{ paddingVertical: 12, paddingHorizontal: 0 }}
@@ -358,108 +427,120 @@ export default function HomeScreen() {
             roundness: 4,
           }}
         >
-          <Card.Title
-            title="Book A Ride Now"
-            titleStyle={{ fontWeight: "bold" }}
-            titleVariant="titleMedium"
-          />
-          <Card.Content style={{ gap: 20 }}>
-            {/* From */}
-            <TouchableOpacity
-              style={styles.textbox}
-              onPress={() => showAutocompleteModal("from")}
-            >
-              <MaterialIcons
-                name="my-location"
-                size={24}
-                color={Colors["light"].textAcc1}
-              />
-              <Text
-                variant="bodyLarge"
-                style={{ color: Colors["light"].textAcc1 }}
+          {/* <ImageBackground
+            source={require("@/assets/images/icon.png")} // Replace with your image
+            // style={{ padding: 16 }}
+            style={{ width: "100%" }}
+            imageStyle={{ opacity: 0.2 }} // Controls image transparency
+          > */}
+            <Card.Title
+              title="Book A Ride Now"
+              titleStyle={{ fontWeight: "bold" }}
+              titleVariant="titleMedium"
+            />
+            <Card.Content style={{ gap: 20 }}>
+              {/* From */}
+              <TouchableOpacity
+                style={styles.textbox}
+                onPress={() => showAutocompleteModal("from")}
               >
-                {from ? ` ${from.name}` : "From"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.textbox}
-              onPress={() => showAutocompleteModal("to")}
-            >
-              <Ionicons
-                name="location-outline"
-                size={24}
-                color={Colors["light"].textAcc1}
-              />
-              <Text
-                variant="bodyLarge"
-                style={{ color: Colors["light"].textAcc1 }}
+                <MaterialIcons
+                  name="my-location"
+                  size={24}
+                  color={Colors["light"].textAcc1}
+                />
+                <Text
+                  variant="bodyLarge"
+                  style={{ color: Colors["light"].textAcc1 }}
+                >
+                  {from ? ` ${from.name}` : "From"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.textbox}
+                onPress={() => showAutocompleteModal("to")}
               >
-                {to ? ` ${to.name}` : "To"}
-              </Text>
-            </TouchableOpacity>
+                <Ionicons
+                  name="location-outline"
+                  size={24}
+                  color={Colors["light"].textAcc1}
+                />
+                <Text
+                  variant="bodyLarge"
+                  style={{ color: Colors["light"].textAcc1 }}
+                >
+                  {to ? ` ${to.name}` : "To"}
+                </Text>
+              </TouchableOpacity>
 
-            {/* Pickup Date */}
-            <TouchableOpacity
-              onPress={() => setShowDatePicker(true)}
-              style={styles.textbox}
-            >
-              <Ionicons
-                name="calendar-outline"
-                size={24}
-                color={Colors["light"].textAcc1}
-              />
-              <Text
-                variant="bodyLarge"
-                style={{ color: Colors["light"].textAcc1 }}
+              {/* Pickup Date */}
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                style={styles.textbox}
               >
-                Pickup Date: {date || "today"}
-              </Text>
-            </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                value={new Date()}
-                minimumDate={new Date()}
-                mode="date"
-                display="default"
-                onChange={handleDateChange}
-              />
-            )}
+                <Ionicons
+                  name="calendar-outline"
+                  size={24}
+                  color={Colors["light"].textAcc1}
+                />
+                <Text
+                  variant="bodyLarge"
+                  style={{ color: Colors["light"].textAcc1 }}
+                >
+                  Pickup Date: {date || "today"}
+                </Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={new Date()}
+                  minimumDate={new Date()}
+                  mode="date"
+                  display="default"
+                  accentColor={Colors["light"].primary}
+                  onChange={handleDateChange}
+                />
+              )}
 
-            {/* Pickup Time */}
-            <TouchableOpacity
-              onPress={() => setShowTimePicker(true)}
-              style={styles.textbox}
-            >
-              <Feather
-                name="clock"
-                size={24}
-                color={Colors["light"].textAcc1}
-              />
-              <Text
-                variant="bodyLarge"
-                style={{ color: Colors["light"].textAcc1 }}
+              {/* Pickup Time */}
+              <TouchableOpacity
+                onPress={() => setShowTimePicker(true)}
+                style={styles.textbox}
               >
-                Pickup Time: {time || "now"}
-              </Text>
-            </TouchableOpacity>
-            {showTimePicker && (
-              <DateTimePicker
-                value={new Date()}
-                mode="time"
-                display="default"
-                minimumDate={new Date()}
-                onChange={handleTimeChange}
-              />
-            )}
-          </Card.Content>
+                <Feather
+                  name="clock"
+                  size={24}
+                  color={Colors["light"].textAcc1}
+                />
+                <Text
+                  variant="bodyLarge"
+                  style={{ color: Colors["light"].textAcc1 }}
+                >
+                  Pickup Time: {time || "now"}
+                </Text>
+              </TouchableOpacity>
+              {showTimePicker && (
+                <DateTimePicker
+                  value={new Date()}
+                  mode="time"
+                  display="default"
+                  minimumDate={new Date()}
+                  onChange={handleTimeChange}
+                />
+              )}
+            </Card.Content>
+          {/* </ImageBackground> */}
         </Card>
         <View style={{ marginVertical: SIZES.width * 0.05 }}>
           <Button
             mode="contained"
             theme={{ roundness: 0 }}
-            style={{ borderRadius: 8 }}
-            dark
-            textColor="white"
+            style={{
+              borderRadius: 8,
+              backgroundColor:
+                !from || !to ? "rgba(169, 169, 169, 0.7)" : "#6200ee", // Gray color for disabled
+              opacity: 1, // Ensure visibility even when disabled
+            }}
+            textColor={!from || !to ? "gray" : "white"} // Gray text when disabled
             labelStyle={{ fontSize: 15 }}
             contentStyle={{ height: 50 }}
             loading={bookingLoading}
@@ -805,14 +886,19 @@ export default function HomeScreen() {
               Phone number
             </Text>
             <TextInput
-              // label="Phone Number"
-              value={phoneNumber}
-              onChangeText={(text) => setPhoneNumber(text)}
+              value={phoneNumber || "+1"} // Default to +1 if empty
+              onChangeText={(text) => {
+                if (!text.startsWith("+1")) {
+                  text = "+1" + text.replace(/[^0-9]/g, ""); // Ensure +1 and allow only numbers
+                } else {
+                  text = "+1" + text.slice(2).replace(/[^0-9]/g, ""); // Keep +1 and clean input
+                }
+                setPhoneNumber(text);
+              }}
               keyboardType="phone-pad"
               placeholder="+1 xxx-xxx-xxxx"
               mode="outlined"
               autoComplete="tel"
-              // onBlur={() => validatePhoneNumber(phoneNumber)}
             />
             <HelperText type="error" visible={!!error}>
               {error}
