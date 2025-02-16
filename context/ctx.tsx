@@ -6,6 +6,8 @@ import {
   type PropsWithChildren,
   useEffect,
 } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 interface User {
   id: string;
@@ -104,7 +106,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
   const logout = async () => {
     setUser(null);
-    const { error } = await supabase.auth.signOut(); // Clear user data on sign out
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+    const { error } = await supabase.auth.signOut();
+
   };
 
   return (

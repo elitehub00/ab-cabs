@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated, Dimensions, Easing } from "react-native";
+import { View, StyleSheet, Animated, Dimensions, Easing } from "react-native";
 
 // Get screen dimensions
 const { width, height } = Dimensions.get("window");
@@ -81,6 +81,7 @@ const AnimatedSplashScreen = () => {
 
       {/* Animated Text */}
       <Animated.Text
+        allowFontScaling={false}
         style={[
           styles.text,
           {

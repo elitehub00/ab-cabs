@@ -11,7 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Avatar, TextInput, Text, Button, Snackbar } from "react-native-paper";
+import { Avatar, TextInput, Button, Snackbar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { CustomHeader } from "@/components/ui/CustomHeader";
@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/ctx";
 import { supabase } from "@/lib/supabase";
+import NoScaleText from "@/components/ui/CustomText";
 
 export default function Account() {
   const { user, setupUser } = useAuth();
@@ -250,9 +251,9 @@ export default function Account() {
 
                 {/* Name Field */}
                 <View>
-                  <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+                  <NoScaleText variant="labelLarge" style={{ marginBottom: 4 }}>
                     Name
-                  </Text>
+                  </NoScaleText>
                   <TextInput
                     mode="flat"
                     label=""
@@ -272,15 +273,15 @@ export default function Account() {
                     error={touched.name && !!errors.name}
                   />
                   {touched.name && errors.name && (
-                    <Text style={styles.errorText}>{errors.name}</Text>
+                    <NoScaleText style={styles.errorText}>{errors.name}</NoScaleText>
                   )}
                 </View>
 
                 {/* Phone Number Field */}
                 <View>
-                  <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+                  <NoScaleText variant="labelLarge" style={{ marginBottom: 4 }}>
                     Phone number
-                  </Text>
+                  </NoScaleText>
                   <TextInput
                     mode="flat"
                     label=""
@@ -312,15 +313,15 @@ export default function Account() {
                   />
 
                   {touched.phone && errors.phone && (
-                    <Text style={styles.errorText}>{errors.phone}</Text>
+                    <NoScaleText style={styles.errorText}>{errors.phone}</NoScaleText>
                   )}
                 </View>
 
                 {/* Email Field */}
                 <View>
-                  <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+                  <NoScaleText variant="labelLarge" style={{ marginBottom: 4 }}>
                     Email
-                  </Text>
+                  </NoScaleText>
                   <TextInput
                     mode="flat"
                     label=""
@@ -341,7 +342,7 @@ export default function Account() {
                     error={touched.email && !!errors.email}
                   />
                   {touched.email && errors.email && (
-                    <Text style={styles.errorText}>{errors.email}</Text>
+                    <NoScaleText style={styles.errorText}>{errors.email}</NoScaleText>
                   )}
                 </View>
 

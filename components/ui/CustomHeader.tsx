@@ -1,10 +1,11 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Pressable, TouchableOpacity, View, Alert } from "react-native";
-import { Text } from "react-native-paper";
+
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import * as Linking from "expo-linking";
 import { useAuth } from "@/context/ctx";
+import NoScaleText from "./CustomText";
 
 interface CustomHeaderProps {
   title: string;
@@ -39,19 +40,19 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
       >
         <View>
           {isHome && (
-            <Text
+            <NoScaleText
               variant="bodyMedium"
               style={{ color: Colors["light"].textAcc }}
             >
-              Hi {user?.full_name.split(" ")[0]},
-            </Text>
+              Hi {user? user.full_name.split(" ")[0]:""},
+            </NoScaleText>
           )}
-          <Text
+          <NoScaleText
             variant="headlineMedium"
             style={{ fontWeight: "bold", marginTop: 2 }}
           >
             {title}
-          </Text>
+          </NoScaleText>
         </View>
         <TouchableOpacity
           onPress={() => {
@@ -117,12 +118,12 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               style={{ marginRight: 12 }}
             />
 
-            <Text
+            <NoScaleText
               variant="titleMedium"
               style={{ fontWeight: "bold", color: "black" }}
             >
               {"+1 (403) 634 - 4373"}
-            </Text>
+            </NoScaleText>
           </View>
           <Pressable
             style={{
@@ -136,9 +137,9 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               makePhoneCall();
             }}
           >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+            <NoScaleText style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
               Call Now
-            </Text>
+            </NoScaleText>
           </Pressable>
         </View>
       )}

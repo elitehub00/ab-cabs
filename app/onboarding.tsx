@@ -1,11 +1,11 @@
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, Image, TouchableOpacity, View } from "react-native";
-import { Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // @ts-ignore
 import Onboarding, { NextButtonProps } from "react-native-onboarding-swiper";
 import { router } from "expo-router";
 import { SIZES } from "@/constants/Sizes";
+import NoScaleText from "@/components/ui/CustomText";
 
 const scaleSize = (size: any) => (SIZES.width / 375) * size;
 export default function OnBoarding() {
@@ -20,19 +20,19 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: SIZES.height * 0.01 }}>
-          <Text variant="titleMedium" style={styles.subHead}>
+          <NoScaleText variant="titleMedium" style={styles.subHead}>
             Welcome to AB Cabs
-          </Text>
-          <Text variant="headlineLarge" style={styles.title}>
+          </NoScaleText>
+          <NoScaleText variant="headlineLarge" style={styles.title}>
             Anywhere you are
-          </Text>
+          </NoScaleText>
         </View>
       ),
       subtitle: (
-        <Text variant="bodyLarge" style={styles.subtitle}>
+        <NoScaleText variant="bodyLarge" style={styles.subtitle}>
           Get picked up from wherever you are, at any time. With AB Cabs, your
           ride is just a tap away.
-        </Text>
+        </NoScaleText>
       ),
     },
     {
@@ -45,19 +45,19 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: SIZES.height * 0.01 }}>
-          <Text variant="titleMedium" style={styles.subHead}>
+          <NoScaleText variant="titleMedium" style={styles.subHead}>
             Choose Your Ride
-          </Text>
-          <Text variant="headlineLarge" style={styles.title}>
+          </NoScaleText>
+          <NoScaleText variant="headlineLarge" style={styles.title}>
             At anytime
-          </Text>
+          </NoScaleText>
         </View>
       ),
       subtitle: (
-        <Text variant="bodyLarge" style={styles.subtitle}>
+        <NoScaleText variant="bodyLarge" style={styles.subtitle}>
           Schedule your rides or book on the go. AB Cabs ensures you're always
           on time, every time.
-        </Text>
+        </NoScaleText>
       ),
     },
     {
@@ -70,19 +70,19 @@ export default function OnBoarding() {
       ),
       title: (
         <View style={{ marginTop: SIZES.height * 0.01 }}>
-          <Text variant="titleMedium" style={styles.subHead}>
+          <NoScaleText variant="titleMedium" style={styles.subHead}>
             Fast and Secure Payments
-          </Text>
-          <Text variant="headlineLarge" style={styles.title}>
+          </NoScaleText>
+          <NoScaleText variant="headlineLarge" style={styles.title}>
             Book your car
-          </Text>
+          </NoScaleText>
         </View>
       ),
       subtitle: (
-        <Text variant="bodyLarge" style={styles.subtitle}>
+        <NoScaleText variant="bodyLarge" style={styles.subtitle}>
           Find a cab instantly and pay effortlessly. Booking your next ride has
           never been easier with AB Cabs.
-        </Text>
+        </NoScaleText>
       ),
     },
   ];
@@ -102,11 +102,11 @@ export default function OnBoarding() {
   const NextButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.next} onPress={onPress}>
-        <Text
+        <NoScaleText
           style={{ color: "#fff", fontWeight: "bold", fontSize: scaleSize(15) }}
         >
           Next
-        </Text>
+        </NoScaleText>
       </TouchableOpacity>
     );
   };
@@ -114,9 +114,9 @@ export default function OnBoarding() {
   const SkipButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.skip} onPress={onPress}>
-        <Text style={{ fontWeight: "bold", fontSize: scaleSize(15) }}>
+        <NoScaleText style={{ fontWeight: "bold", fontSize: scaleSize(15) }}>
           Skip
-        </Text>
+        </NoScaleText>
       </TouchableOpacity>
     );
   };
@@ -124,11 +124,11 @@ export default function OnBoarding() {
   const DoneButton = ({ onPress }: any) => {
     return (
       <TouchableOpacity style={styles.done} onPress={onPress}>
-        <Text
+        <NoScaleText
           style={{ color: "#fff", fontWeight: "bold", fontSize: scaleSize(15) }}
         >
           Continue to App
-        </Text>
+        </NoScaleText>
       </TouchableOpacity>
     );
   };
