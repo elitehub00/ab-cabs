@@ -1,3 +1,4 @@
+import NoScaleText from "@/components/ui/CustomText";
 import { Colors } from "@/constants/Colors";
 import { SIZES } from "@/constants/Sizes";
 import { useAuth } from "@/context/ctx";
@@ -8,7 +9,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
 import { Image, StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button } from "react-native-paper";
 
 export default function Login() {
   const { login } = useAuth();
@@ -28,9 +29,9 @@ export default function Login() {
           style={styles.img}
         />
 
-        <Text variant="headlineLarge" style={styles.text}>
+        <NoScaleText variant="headlineLarge" style={styles.text}>
           Login to Continue
-        </Text>
+        </NoScaleText>
 
         <Button
           icon="google"

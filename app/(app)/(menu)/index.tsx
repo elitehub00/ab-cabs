@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable, Image, ScrollView } from "react-native";
-import { Avatar, Text, Button } from "react-native-paper";
+import { Avatar, Button } from "react-native-paper";
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import { router, Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { SIZES } from "@/constants/Sizes";
 import { useAuth } from "@/context/ctx";
+import NoScaleText from "@/components/ui/CustomText";
 
 export default function Menu() {
   const { user, logout } = useAuth();
@@ -43,9 +44,9 @@ export default function Menu() {
             }
           />
           <View>
-            <Text variant="labelMedium">{user?.full_name}</Text>
-            <Text variant="bodyMedium">{user?.email}</Text>
-            <Text variant="bodyMedium">{user?.mobile}</Text>
+            <NoScaleText variant="labelMedium">{user?.full_name}</NoScaleText>
+            <NoScaleText variant="bodyMedium">{user?.email}</NoScaleText>
+            <NoScaleText variant="bodyMedium">{user?.mobile}</NoScaleText>
           </View>
         </View>
         <View style={styles.menu}>
@@ -53,9 +54,9 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="info" size={32} color="black" />
-                <Text variant="labelMedium" style={styles.menuText}>
+                <NoScaleText variant="labelMedium" style={styles.menuText}>
                   About Us
-                </Text>
+                </NoScaleText>
               </View>
               <Pressable onPress={() => {router.push("/(app)/(menu)/about")}} style={styles.button}>
                 <Feather name="chevron-right" size={24} color="black" />
@@ -67,9 +68,9 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="globe" size={32} color="black" />
-                <Text variant="labelMedium" style={styles.menuText}>
+                <NoScaleText variant="labelMedium" style={styles.menuText}>
                   Our Website
-                </Text>
+                </NoScaleText>
               </View>
               <Pressable
                 onPress={() => {
@@ -112,9 +113,9 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="youtube" size={32} color="black" />
-                <Text variant="labelMedium" style={styles.menuText}>
+                <NoScaleText variant="labelMedium" style={styles.menuText}>
                   Youtube
-                </Text>
+                </NoScaleText>
               </View>
               <Pressable
                 onPress={() => {
@@ -131,9 +132,9 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="facebook" size={32} color="black" />
-                <Text variant="labelMedium" style={styles.menuText}>
+                <NoScaleText variant="labelMedium" style={styles.menuText}>
                   Facebook
-                </Text>
+                </NoScaleText>
               </View>
               <Pressable
                 onPress={() => {
@@ -152,9 +153,9 @@ export default function Menu() {
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <MaterialIcons name="tiktok" size={32} color="black" />
-                <Text variant="labelMedium" style={styles.menuText}>
+                <NoScaleText variant="labelMedium" style={styles.menuText}>
                   TikTok
-                </Text>
+                </NoScaleText>
               </View>
               <Pressable
                 onPress={() => {

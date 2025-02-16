@@ -2,7 +2,6 @@ import { Colors } from "@/constants/Colors";
 import { StyleSheet, View } from "react-native";
 import {
   Card,
-  Text,
   Button,
   ActivityIndicator,
   Portal,
@@ -18,6 +17,7 @@ import { supabase } from "@/lib/supabase";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { set } from "date-fns";
+import NoScaleText from "@/components/ui/CustomText";
 
 interface User {
   id: string;
@@ -120,9 +120,9 @@ export default function Promotion() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text variant="labelLarge" style={{ color: Colors["light"].text }}>
+          <NoScaleText variant="labelLarge" style={{ color: Colors["light"].text }}>
             promotions will be available soon..
-          </Text>
+          </NoScaleText>
         </View>
       ) : (
         <View style={styles.contentContainer}>
@@ -173,8 +173,8 @@ export default function Promotion() {
                   </View>
 
                   <View style={styles.textContainer}>
-                    <Text variant="titleMedium">{item.name}</Text>
-                    <Text>Valid to {formatDateToMMDDYYYY(item.valid)}</Text>
+                    <NoScaleText variant="titleMedium">{item.name}</NoScaleText>
+                    <NoScaleText>Valid to {formatDateToMMDDYYYY(item.valid)}</NoScaleText>
                     <View
                       style={{
                         flexDirection: "row",
@@ -183,12 +183,12 @@ export default function Promotion() {
                       }}
                     >
                       {item.userPromotion[0]?.userId.id === user?.id ? (
-                        <Text
+                        <NoScaleText
                           variant="labelLarge"
                           style={{ fontWeight: "bold", color: "orange",padding:10 }}
                         >
                           Used
-                        </Text>
+                        </NoScaleText>
                       ) : (
                         <Button mode="text" onPress={() => showDialog(item)}>
                           Use now
@@ -211,9 +211,9 @@ export default function Promotion() {
             >
               <Dialog.Title>Use Promotion</Dialog.Title>
               <Dialog.Content>
-                <Text variant="bodyMedium">
+                <NoScaleText variant="bodyMedium">
                   Are you sure you want to use this promotion?
-                </Text>
+                </NoScaleText>
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={hideDialog}>Cancel</Button>

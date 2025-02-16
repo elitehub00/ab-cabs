@@ -1,10 +1,9 @@
 import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { Text } from "react-native-paper";
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import { Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { SIZES } from "@/constants/Sizes";
-
+import NoScaleText from "@/components/ui/CustomText";
 export default function About() {
   return (
     <View style={styles.container}>
@@ -26,43 +25,43 @@ export default function About() {
           />
         </View>
         <View style={styles.section}>
-          <Text style={styles.title}>Welcome to AB Cabs</Text>
-          <Text style={styles.description}>
+          <NoScaleText style={styles.title}>Welcome to AB Cabs</NoScaleText>
+          <NoScaleText style={styles.description}>
             Your Reliable Ride, Anytime, Anywhere! At AB Cabs, we are passionate
             about transforming the way people travel. Whether it’s a quick trip
             across town, a daily commute, or a special occasion, our service
             ensures that every ride is seamless, comfortable, and dependable.
-          </Text>
+          </NoScaleText>
         </View>
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Our Vision</Text>
-          <Text style={styles.description}>
+          <NoScaleText style={styles.subtitle}>Our Vision</NoScaleText>
+          <NoScaleText style={styles.description}>
             To bridge the gap between people and places with transportation
             solutions that are efficient, accessible, and trustworthy.
-          </Text>
-          <Text style={styles.listTitle}>Our Values:</Text>
-          <Text style={styles.listItem}>• Customer Commitment: Your needs are our priority.</Text>
-          <Text style={styles.listItem}>• Punctuality: We value your time and ensure prompt service.</Text>
-          <Text style={styles.listItem}>• Innovation: Leveraging technology for an enhanced experience.</Text>
-          <Text style={styles.listItem}>• Safety and Trust: Secure rides with the highest standards of care.</Text>
+          </NoScaleText>
+          <NoScaleText style={styles.listTitle}>Our Values:</NoScaleText>
+          <NoScaleText style={styles.listItem}>• Customer Commitment: Your needs are our priority.</NoScaleText>
+          <NoScaleText style={styles.listItem}>• Punctuality: We value your time and ensure prompt service.</NoScaleText>
+          <NoScaleText style={styles.listItem}>• Innovation: Leveraging technology for an enhanced experience.</NoScaleText>
+          <NoScaleText style={styles.listItem}>• Safety and Trust: Secure rides with the highest standards of care.</NoScaleText>
         </View>
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Why Choose AB Cabs?</Text>
-          <Text style={styles.listItem}>✅ Real-Time Tracking: Monitor your ride in real-time.</Text>
-          <Text style={styles.listItem}>✅ Flexible Options: Choose the ride type that fits your journey.</Text>
-          <Text style={styles.listItem}>✅ 24/7 Service: Wherever and whenever you need us.</Text>
+          <NoScaleText style={styles.subtitle}>Why Choose AB Cabs?</NoScaleText>
+          <NoScaleText style={styles.listItem}>✅ Real-Time Tracking: Monitor your ride in real-time.</NoScaleText>
+          <NoScaleText style={styles.listItem}>✅ Flexible Options: Choose the ride type that fits your journey.</NoScaleText>
+          <NoScaleText style={styles.listItem}>✅ 24/7 Service: Wherever and whenever you need us.</NoScaleText>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.subtitle}>Your Ride, Our Responsibility</Text>
-          <Text style={styles.description}>
+          <NoScaleText style={styles.subtitle}>Your Ride, Our Responsibility</NoScaleText>
+          <NoScaleText style={styles.description}>
             With AB Cabs, your journey is our priority. We’re committed to
             providing reliable and safe rides, ensuring peace of mind at every step.
-          </Text>
-          <Text style={styles.listTitle}>Get in Touch:</Text>
-          <Text style={styles.description}>
+          </NoScaleText>
+          <NoScaleText style={styles.listTitle}>Get in Touch:</NoScaleText>
+          <NoScaleText style={styles.description}>
             Have questions or need assistance? Contact our support team via the app
             or our helpline. Let AB Cabs make your next ride a better experience!
-          </Text>
+          </NoScaleText>
         </View>
       </ScrollView>
     </View>

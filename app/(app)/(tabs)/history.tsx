@@ -4,7 +4,6 @@ import { StyleSheet, Image, View } from "react-native";
 import {
   SegmentedButtons,
   Card,
-  Text,
   Button,
   Divider,
   ActivityIndicator,
@@ -18,6 +17,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/ctx";
 import { format, parseISO, set } from "date-fns";
 import { useIsFocused } from "@react-navigation/native";
+import NoScaleText from "@/components/ui/CustomText";
 
 interface Booking {
   id: string;
@@ -200,9 +200,9 @@ export default function TabTwoScreen() {
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
-            <Text variant="labelLarge" style={{ color: Colors["light"].text }}>
+            <NoScaleText variant="labelLarge" style={{ color: Colors["light"].text }}>
               No {value} rides found
-            </Text>
+            </NoScaleText>
           </View>
         ) : (
           <View style={{ flex: 1, marginTop: 24 }}>
@@ -226,10 +226,10 @@ export default function TabTwoScreen() {
                 >
                   <Card.Content>
                     <View>
-                      <Text>
+                      <NoScaleText>
                         {format(item.date, "dd MMM yyyy")},{" "}
                         {formatTime(item.time)}
-                      </Text>
+                      </NoScaleText>
                     </View>
                     <View style={styles.cardContent}>
                       <View style={styles.lineContainer}>
@@ -254,15 +254,15 @@ export default function TabTwoScreen() {
                         />
                       </View>
                       <View style={{ flex: 1 }}>
-                        <Text variant="bodyLarge" style={{ color: "#838383" }}>
+                        <NoScaleText variant="bodyLarge" style={{ color: "#838383" }}>
                           Pick-up
-                        </Text>
-                        <Text
+                        </NoScaleText>
+                        <NoScaleText
                           variant="bodyLarge"
                           style={{ fontWeight: "bold" }}
                         >
                           {item.from.name}
-                        </Text>
+                        </NoScaleText>
                         <Divider
                           bold
                           theme={{
@@ -276,15 +276,15 @@ export default function TabTwoScreen() {
                             width: "100%",
                           }}
                         />
-                        <Text variant="bodyLarge" style={{ color: "#838383" }}>
+                        <NoScaleText variant="bodyLarge" style={{ color: "#838383" }}>
                           Drop off
-                        </Text>
-                        <Text
+                        </NoScaleText>
+                        <NoScaleText
                           variant="bodyLarge"
                           style={{ fontWeight: "bold" }}
                         >
                           {item.to.name}
-                        </Text>
+                        </NoScaleText>
                       </View>
                     </View>
                     <View style={styles.cardBottom}>

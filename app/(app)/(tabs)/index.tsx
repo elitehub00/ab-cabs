@@ -10,7 +10,6 @@ import {
   ImageBackground,
 } from "react-native";
 import {
-  Text,
   Card,
   Button,
   Snackbar,
@@ -49,6 +48,7 @@ import MapView, {
   LatLng,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
+import NoScaleText from "@/components/ui/CustomText";
 
 const hisArr = [
   { name: "Home", address: "2972 Westheimer Rd." },
@@ -394,12 +394,12 @@ export default function HomeScreen() {
               source={require("@/assets/images/icon.png")}
             />
 
-            <Text
+            <NoScaleText
               variant="titleMedium"
               style={{ fontWeight: "bold", color: "black" }}
             >
               {"Add a Google review"}
-            </Text>
+            </NoScaleText>
           </View>
           <Pressable
             style={{
@@ -413,9 +413,11 @@ export default function HomeScreen() {
               openLink("https://g.co/kgs/kawkbaa");
             }}
           >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+            <NoScaleText
+              style={{ color: "white", fontWeight: "bold", fontSize: 15 }}
+            >
               Review
-            </Text>
+            </NoScaleText>
           </Pressable>
         </View>
 
@@ -433,101 +435,101 @@ export default function HomeScreen() {
             style={{ width: "100%" }}
             imageStyle={{ opacity: 0.2 }} // Controls image transparency
           > */}
-            <Card.Title
-              title="Book A Ride Now"
-              titleStyle={{ fontWeight: "bold" }}
-              titleVariant="titleMedium"
-            />
-            <Card.Content style={{ gap: 20 }}>
-              {/* From */}
-              <TouchableOpacity
-                style={styles.textbox}
-                onPress={() => showAutocompleteModal("from")}
+          <Card.Title
+            title="Book A Ride Now"
+            titleStyle={{ fontWeight: "bold" }}
+            titleVariant="titleMedium"
+          />
+          <Card.Content style={{ gap: 20 }}>
+            {/* From */}
+            <TouchableOpacity
+              style={styles.textbox}
+              onPress={() => showAutocompleteModal("from")}
+            >
+              <MaterialIcons
+                name="my-location"
+                size={24}
+                color={Colors["light"].textAcc1}
+              />
+              <NoScaleText
+                variant="bodyLarge"
+                style={{ color: Colors["light"].textAcc1 }}
               >
-                <MaterialIcons
-                  name="my-location"
-                  size={24}
-                  color={Colors["light"].textAcc1}
-                />
-                <Text
-                  variant="bodyLarge"
-                  style={{ color: Colors["light"].textAcc1 }}
-                >
-                  {from ? ` ${from.name}` : "From"}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.textbox}
-                onPress={() => showAutocompleteModal("to")}
+                {from ? ` ${from.name}` : "From"}
+              </NoScaleText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.textbox}
+              onPress={() => showAutocompleteModal("to")}
+            >
+              <Ionicons
+                name="location-outline"
+                size={24}
+                color={Colors["light"].textAcc1}
+              />
+              <NoScaleText
+                variant="bodyLarge"
+                style={{ color: Colors["light"].textAcc1 }}
               >
-                <Ionicons
-                  name="location-outline"
-                  size={24}
-                  color={Colors["light"].textAcc1}
-                />
-                <Text
-                  variant="bodyLarge"
-                  style={{ color: Colors["light"].textAcc1 }}
-                >
-                  {to ? ` ${to.name}` : "To"}
-                </Text>
-              </TouchableOpacity>
+                {to ? ` ${to.name}` : "To"}
+              </NoScaleText>
+            </TouchableOpacity>
 
-              {/* Pickup Date */}
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(true)}
-                style={styles.textbox}
+            {/* Pickup Date */}
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              style={styles.textbox}
+            >
+              <Ionicons
+                name="calendar-outline"
+                size={24}
+                color={Colors["light"].textAcc1}
+              />
+              <NoScaleText
+                variant="bodyLarge"
+                style={{ color: Colors["light"].textAcc1 }}
               >
-                <Ionicons
-                  name="calendar-outline"
-                  size={24}
-                  color={Colors["light"].textAcc1}
-                />
-                <Text
-                  variant="bodyLarge"
-                  style={{ color: Colors["light"].textAcc1 }}
-                >
-                  Pickup Date: {date || "today"}
-                </Text>
-              </TouchableOpacity>
-              {showDatePicker && (
-                <DateTimePicker
-                  value={new Date()}
-                  minimumDate={new Date()}
-                  mode="date"
-                  display="default"
-                  accentColor={Colors["light"].primary}
-                  onChange={handleDateChange}
-                />
-              )}
+                Pickup Date: {date || "today"}
+              </NoScaleText>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={new Date()}
+                minimumDate={new Date()}
+                mode="date"
+                display="default"
+                accentColor={Colors["light"].primary}
+                onChange={handleDateChange}
+              />
+            )}
 
-              {/* Pickup Time */}
-              <TouchableOpacity
-                onPress={() => setShowTimePicker(true)}
-                style={styles.textbox}
+            {/* Pickup Time */}
+            <TouchableOpacity
+              onPress={() => setShowTimePicker(true)}
+              style={styles.textbox}
+            >
+              <Feather
+                name="clock"
+                size={24}
+                color={Colors["light"].textAcc1}
+              />
+              <NoScaleText
+                variant="bodyLarge"
+                style={{ color: Colors["light"].textAcc1 }}
               >
-                <Feather
-                  name="clock"
-                  size={24}
-                  color={Colors["light"].textAcc1}
-                />
-                <Text
-                  variant="bodyLarge"
-                  style={{ color: Colors["light"].textAcc1 }}
-                >
-                  Pickup Time: {time || "now"}
-                </Text>
-              </TouchableOpacity>
-              {showTimePicker && (
-                <DateTimePicker
-                  value={new Date()}
-                  mode="time"
-                  display="default"
-                  minimumDate={new Date()}
-                  onChange={handleTimeChange}
-                />
-              )}
-            </Card.Content>
+                Pickup Time: {time || "now"}
+              </NoScaleText>
+            </TouchableOpacity>
+            {showTimePicker && (
+              <DateTimePicker
+                value={new Date()}
+                mode="time"
+                display="default"
+                minimumDate={new Date()}
+                onChange={handleTimeChange}
+              />
+            )}
+          </Card.Content>
           {/* </ImageBackground> */}
         </Card>
         <View style={{ marginVertical: SIZES.width * 0.05 }}>
@@ -537,7 +539,9 @@ export default function HomeScreen() {
             style={{
               borderRadius: 8,
               backgroundColor:
-                !from || !to ? "rgba(169, 169, 169, 0.7)" : "#6200ee", // Gray color for disabled
+                !from || !to
+                  ? "rgba(169, 169, 169, 0.7)"
+                  : Colors.light.primary, // Gray color for disabled
               opacity: 1, // Ensure visibility even when disabled
             }}
             textColor={!from || !to ? "gray" : "white"} // Gray text when disabled
@@ -552,9 +556,9 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.history}>
-          <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
+          <NoScaleText variant="titleMedium" style={{ fontWeight: "bold" }}>
             Saved Locations
-          </Text>
+          </NoScaleText>
           <Pressable onPress={showLocationModal}>
             <MaterialCommunityIcons
               name="plus-circle"
@@ -579,8 +583,11 @@ export default function HomeScreen() {
                 <View style={styles.location}>
                   <Ionicons name="location-outline" size={34} color={"black"} />
                   <View>
-                    <Text variant="titleSmall"> {item.name}</Text>
-                    <Text variant="labelSmall"> {item.location.name}</Text>
+                    <NoScaleText variant="titleSmall"> {item.name}</NoScaleText>
+                    <NoScaleText variant="labelSmall">
+                      {" "}
+                      {item.location.name}
+                    </NoScaleText>
                   </View>
                 </View>
               </View>
@@ -637,16 +644,16 @@ export default function HomeScreen() {
                 resizeMode: "contain",
               }}
             />
-            <Text
+            <NoScaleText
               variant="titleLarge"
               style={{ fontWeight: "bold", marginVertical: SIZES.width * 0.05 }}
             >
               Thank you
-            </Text>
-            <Text variant="bodyMedium">
+            </NoScaleText>
+            <NoScaleText variant="bodyMedium">
               Your booking has been placed sent to AB Cabs. they Will contact
               you soon.
-            </Text>
+            </NoScaleText>
           </View>
           <Button
             mode="contained"
@@ -829,11 +836,14 @@ export default function HomeScreen() {
                               color={"black"}
                             />
                             <View>
-                              <Text variant="titleSmall"> {item.name}</Text>
-                              <Text variant="labelSmall">
+                              <NoScaleText variant="titleSmall">
+                                {" "}
+                                {item.name}
+                              </NoScaleText>
+                              <NoScaleText variant="labelSmall">
                                 {" "}
                                 {item.location?.name}
-                              </Text>
+                              </NoScaleText>
                             </View>
                           </View>
                         </View>
@@ -847,7 +857,9 @@ export default function HomeScreen() {
                   paddingHorizontal: SIZES.width * 0.05,
                   paddingTop: SIZES.height * 0.02,
                 }}
-                ListEmptyComponent={<Text>No saved locations</Text>}
+                ListEmptyComponent={
+                  <NoScaleText>No saved locations</NoScaleText>
+                }
               />
             )}
             {markerPosition && (
@@ -882,9 +894,9 @@ export default function HomeScreen() {
         >
           <Dialog.Title>Enter Your Phone Number</Dialog.Title>
           <Dialog.Content>
-            <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+            <NoScaleText variant="labelLarge" style={{ marginBottom: 4 }}>
               Phone number
-            </Text>
+            </NoScaleText>
             <TextInput
               value={phoneNumber || "+1"} // Default to +1 if empty
               onChangeText={(text) => {
