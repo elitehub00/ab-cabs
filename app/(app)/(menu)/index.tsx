@@ -20,7 +20,6 @@ export default function Menu() {
     }
   };
 
-  
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -50,7 +49,12 @@ export default function Menu() {
           </View>
         </View>
         <View style={styles.menu}>
-          <View style={styles.menuCard}>
+          <Pressable
+            onPress={() => {
+              router.push("/(app)/(menu)/about");
+            }}
+            style={styles.menuCard}
+          >
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="info" size={32} color="black" />
@@ -58,13 +62,23 @@ export default function Menu() {
                   About Us
                 </NoScaleText>
               </View>
-              <Pressable onPress={() => {router.push("/(app)/(menu)/about")}} style={styles.button}>
+              <Pressable
+                onPress={() => {
+                  router.push("/(app)/(menu)/about");
+                }}
+                style={styles.button}
+              >
                 <Feather name="chevron-right" size={24} color="black" />
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
-          <View style={styles.menuCard}>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              router.push("/(app)/(menu)/about");
+            }}
+            style={styles.menuCard}
+          >
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="globe" size={32} color="black" />
@@ -82,7 +96,7 @@ export default function Menu() {
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
+          </Pressable>
           {/* <View style={styles.menuCard}>
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
@@ -109,7 +123,12 @@ export default function Menu() {
               </Pressable>
             </View>
           </View> */}
-          <View style={styles.menuCard}>
+          <Pressable
+            onPress={() => {
+              router.push("/(app)/(menu)/about");
+            }}
+            style={styles.menuCard}
+          >
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="youtube" size={32} color="black" />
@@ -127,8 +146,13 @@ export default function Menu() {
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
-          <View style={styles.menuCard}>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              router.push("/(app)/(menu)/about");
+            }}
+            style={styles.menuCard}
+          >
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="facebook" size={32} color="black" />
@@ -148,8 +172,13 @@ export default function Menu() {
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
-          <View style={styles.menuCard}>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              router.push("/(app)/(menu)/about");
+            }}
+            style={styles.menuCard}
+          >
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <MaterialIcons name="tiktok" size={32} color="black" />
@@ -169,14 +198,14 @@ export default function Menu() {
               </Pressable>
               {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
             </View>
-          </View>
+          </Pressable>
         </View>
 
         <View style={styles.promotion}>
-          <Image
+          {/* <Image
             source={require("@/assets/images/promotion.png")}
             style={{ width: "100%", overflow: "hidden" }}
-          />
+          /> */}
         </View>
 
         <Button
@@ -267,6 +296,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     elevation: 8,
+    // marginVertical: SIZES.width * 0.05,
   },
   promotion: {
     marginVertical: SIZES.width * 0.05,
