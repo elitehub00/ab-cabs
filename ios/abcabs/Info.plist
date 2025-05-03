@@ -22,6 +22,8 @@
     <string>1.0.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
+
+    <!-- ✅ Consolidated all URL schemes -->
     <key>CFBundleURLTypes</key>
     <array>
       <dict>
@@ -37,7 +39,14 @@
           <string>exp+ab-cabs</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.378744098867-1ea1qcrc3164io5d1suvapicctrb7uav</string>
+        </array>
+      </dict>
     </array>
+
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>

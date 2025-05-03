@@ -15,7 +15,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.abcabs.abcabs"
+      "bundleIdentifier": "com.abcabs.abcabs",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.378744098867-1ea1qcrc3164io5d1suvapicctrb7uav"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,8 +30,8 @@
       "versionCode": 2,
       "package": "com.abcabs.abcabs",
       "config": {
-        "googleMaps":{
-          "apiKey":"AIzaSyD-JggDDP0b4KRJSpCTeWRlou2OhzaBh94"
+        "googleMaps": {
+          "apiKey": "AIzaSyD-JggDDP0b4KRJSpCTeWRlou2OhzaBh94"
         }
       }
     },
@@ -49,9 +54,7 @@
           "imageWidth": 100
         }
       ],
-      [
-        "@react-native-google-signin/google-signin"
-      ],
+      ["@react-native-google-signin/google-signin"],
       [
         "expo-image-picker",
         {
