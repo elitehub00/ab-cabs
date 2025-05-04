@@ -81,8 +81,10 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
     margin: SIZES.width * 0.05,
   },
+  
   loginCom: {
     marginTop: SIZES.height * 0.2,
     justifyContent: "center",
