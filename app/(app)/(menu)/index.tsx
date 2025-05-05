@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable, Image, ScrollView, Alert } from "react-native";
 import { Avatar, Button } from "react-native-paper";
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import { router, Stack } from "expo-router";
@@ -11,93 +11,118 @@ import { useAuth } from "@/context/ctx";
 import NoScaleText from "@/components/ui/CustomText";
 
 export default function Menu() {
-  const { user, logout } = useAuth();
-  const openLink = async (url: string) => {
-    try {
-      await Linking.openURL(url);
-    } catch (error) {
-      console.error("Error opening URL:", error);
-    }
-  };
+  const { user, logout, deleteAccount } = useAuth();
 
-  return (
-    <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          header: () => (
-            <CustomHeader title="My Settings" isHome={false} isMenu={true} />
-          ),
-        }}
-      />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.contentContainer}
-      >
-        <View style={styles.profile}>
-          <Avatar.Image
-            size={80}
-            source={
-              user?.avatar_url
-                ? { uri: user.avatar_url }
-                : require("@/assets/images/account.png")
+  const handleCloseAccount = () => {
+    Alert.alert(
+      "Close Account",
+      "Are you sure you want to permanently close your account? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Yes, Close It",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteAccount(); // Deletes user from Supabase
+              // logout() is already called inside deleteAccount, so no need to repeat
+            } catch (error) {
+              console.error("Failed to delete account:", error);
+              Alert.alert("Error", "Failed to close your account. Please try again.");
             }
-          />
-          <View>
-            <NoScaleText variant="labelMedium">{user?.full_name}</NoScaleText>
-            <NoScaleText variant="bodyMedium">{user?.email}</NoScaleText>
-            <NoScaleText variant="bodyMedium">{user?.mobile}</NoScaleText>
-          </View>
+          },
+        },
+      ]
+    );
+  };
+  
+
+const openLink = async (url: string) => {
+  try {
+    await Linking.openURL(url);
+  } catch (error) {
+    console.error("Error opening URL:", error);
+  }
+};
+
+return (
+  <View style={styles.container}>
+    <Stack.Screen
+      options={{
+        header: () => (
+          <CustomHeader title="My Settings" isHome={false} isMenu={true} />
+        ),
+      }}
+    />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.contentContainer}
+    >
+      <View style={styles.profile}>
+        <Avatar.Image
+          size={80}
+          source={
+            user?.avatar_url
+              ? { uri: user.avatar_url }
+              : require("@/assets/images/account.png")
+          }
+        />
+        <View>
+          <NoScaleText variant="labelMedium">{user?.full_name}</NoScaleText>
+          <NoScaleText variant="bodyMedium">{user?.email}</NoScaleText>
+          <NoScaleText variant="bodyMedium">{user?.mobile}</NoScaleText>
         </View>
-        <View style={styles.menu}>
-          <Pressable
-            onPress={() => {
-              router.push("/(app)/(menu)/about");
-            }}
-            style={styles.menuCard}
-          >
-            <View style={styles.menuRow}>
-              <View style={styles.menuLeft}>
-                <Feather name="info" size={32} color="black" />
-                <NoScaleText variant="labelMedium" style={styles.menuText}>
-                  About Us
-                </NoScaleText>
-              </View>
-              <Pressable
-                onPress={() => {
-                  router.push("/(app)/(menu)/about");
-                }}
-                style={styles.button}
-              >
-                <Feather name="chevron-right" size={24} color="black" />
-              </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+      </View>
+      <View style={styles.menu}>
+        <Pressable
+          onPress={() => {
+            router.push("/(app)/(menu)/about");
+          }}
+          style={styles.menuCard}
+        >
+          <View style={styles.menuRow}>
+            <View style={styles.menuLeft}>
+              <Feather name="info" size={32} color="black" />
+              <NoScaleText variant="labelMedium" style={styles.menuText}>
+                About Us
+              </NoScaleText>
             </View>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              router.push("/(app)/(menu)/about");
-            }}
-            style={styles.menuCard}
-          >
-            <View style={styles.menuRow}>
-              <View style={styles.menuLeft}>
-                <Feather name="globe" size={32} color="black" />
-                <NoScaleText variant="labelMedium" style={styles.menuText}>
-                  Our Website
-                </NoScaleText>
-              </View>
-              <Pressable
-                onPress={() => {
-                  openLink("https://abcabs.ca");
-                }}
-                style={styles.button}
-              >
-                <Feather name="chevron-right" size={24} color="black" />
-              </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+            <Pressable
+              onPress={() => {
+                router.push("/(app)/(menu)/about");
+              }}
+              style={styles.button}
+            >
+              <Feather name="chevron-right" size={24} color="black" />
+            </Pressable>
+            {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+          </View>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            router.push("/(app)/(menu)/about");
+          }}
+          style={styles.menuCard}
+        >
+          <View style={styles.menuRow}>
+            <View style={styles.menuLeft}>
+              <Feather name="globe" size={32} color="black" />
+              <NoScaleText variant="labelMedium" style={styles.menuText}>
+                Our Website
+              </NoScaleText>
             </View>
-          </Pressable>
-          {/* <View style={styles.menuCard}>
+            <Pressable
+              onPress={() => {
+                openLink("https://abcabs.ca");
+              }}
+              style={styles.button}
+            >
+              <Feather name="chevron-right" size={24} color="black" />
+            </Pressable>
+            {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+          </View>
+        </Pressable>
+        {/* <View style={styles.menuCard}>
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="star" size={32} color="black" />
@@ -110,7 +135,7 @@ export default function Menu() {
               </Pressable>
             </View>
           </View> */}
-          {/* <View style={styles.menuCard}>
+        {/* <View style={styles.menuCard}>
             <View style={styles.menuRow}>
               <View style={styles.menuLeft}>
                 <Feather name="help-circle" size={32} color="black" />
@@ -123,112 +148,132 @@ export default function Menu() {
               </Pressable>
             </View>
           </View> */}
-          <Pressable
-            onPress={() => {
-              router.push("/(app)/(menu)/about");
-            }}
-            style={styles.menuCard}
-          >
-            <View style={styles.menuRow}>
-              <View style={styles.menuLeft}>
-                <Feather name="youtube" size={32} color="black" />
-                <NoScaleText variant="labelMedium" style={styles.menuText}>
-                  Youtube
-                </NoScaleText>
-              </View>
-              <Pressable
-                onPress={() => {
-                  openLink("https://www.youtube.com/@abcabs-2024");
-                }}
-                style={styles.button}
-              >
-                <Feather name="chevron-right" size={24} color="black" />
-              </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+        <Pressable
+          onPress={() => {
+            router.push("/(app)/(menu)/about");
+          }}
+          style={styles.menuCard}
+        >
+          <View style={styles.menuRow}>
+            <View style={styles.menuLeft}>
+              <Feather name="youtube" size={32} color="black" />
+              <NoScaleText variant="labelMedium" style={styles.menuText}>
+                Youtube
+              </NoScaleText>
             </View>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              router.push("/(app)/(menu)/about");
-            }}
-            style={styles.menuCard}
-          >
-            <View style={styles.menuRow}>
-              <View style={styles.menuLeft}>
-                <Feather name="facebook" size={32} color="black" />
-                <NoScaleText variant="labelMedium" style={styles.menuText}>
-                  Facebook
-                </NoScaleText>
-              </View>
-              <Pressable
-                onPress={() => {
-                  openLink(
-                    "https://www.facebook.com/profile.php?id=61566862439428&mibextid=ZbWKwL"
-                  );
-                }}
-                style={styles.button}
-              >
-                <Feather name="chevron-right" size={24} color="black" />
-              </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+            <Pressable
+              onPress={() => {
+                openLink("https://www.youtube.com/@abcabs-2024");
+              }}
+              style={styles.button}
+            >
+              <Feather name="chevron-right" size={24} color="black" />
+            </Pressable>
+            {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+          </View>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            router.push("/(app)/(menu)/about");
+          }}
+          style={styles.menuCard}
+        >
+          <View style={styles.menuRow}>
+            <View style={styles.menuLeft}>
+              <Feather name="facebook" size={32} color="black" />
+              <NoScaleText variant="labelMedium" style={styles.menuText}>
+                Facebook
+              </NoScaleText>
             </View>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              router.push("/(app)/(menu)/about");
-            }}
-            style={styles.menuCard}
-          >
-            <View style={styles.menuRow}>
-              <View style={styles.menuLeft}>
-                <MaterialIcons name="tiktok" size={32} color="black" />
-                <NoScaleText variant="labelMedium" style={styles.menuText}>
-                  TikTok
-                </NoScaleText>
-              </View>
-              <Pressable
-                onPress={() => {
-                  openLink(
-                    "https://www.tiktok.com/@ab_cabs_/video/7435130896346320183?_t=8rVzswQRyIq&_r=1"
-                  );
-                }}
-                style={styles.button}
-              >
-                <Feather name="chevron-right" size={24} color="black" />
-              </Pressable>
-              {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+            <Pressable
+              onPress={() => {
+                openLink(
+                  "https://www.facebook.com/profile.php?id=61566862439428&mibextid=ZbWKwL"
+                );
+              }}
+              style={styles.button}
+            >
+              <Feather name="chevron-right" size={24} color="black" />
+            </Pressable>
+            {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+          </View>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            router.push("/(app)/(menu)/about");
+          }}
+          style={styles.menuCard}
+        >
+          <View style={styles.menuRow}>
+            <View style={styles.menuLeft}>
+              <MaterialIcons name="tiktok" size={32} color="black" />
+              <NoScaleText variant="labelMedium" style={styles.menuText}>
+                TikTok
+              </NoScaleText>
             </View>
-          </Pressable>
-        </View>
+            <Pressable
+              onPress={() => {
+                openLink(
+                  "https://www.tiktok.com/@ab_cabs_/video/7435130896346320183?_t=8rVzswQRyIq&_r=1"
+                );
+              }}
+              style={styles.button}
+            >
+              <Feather name="chevron-right" size={24} color="black" />
+            </Pressable>
+            {/* <IconButton icon="chevron-right" size={24} iconColor={"black"} /> */}
+          </View>
+        </Pressable>
+      </View>
 
-        <View style={styles.promotion}>
-          {/* <Image
+      <View style={styles.promotion}>
+        {/* <Image
             source={require("@/assets/images/promotion.png")}
             style={{ width: "100%", overflow: "hidden" }}
           /> */}
-        </View>
+      </View>
+      <Button
+        mode="contained"
+        theme={{ roundness: 0 }}
+        style={{ borderRadius: 8, marginTop: 10 }}
+        icon="delete"
+        dark
+        buttonColor="#B00020"
+        textColor="white"
+        labelStyle={{ fontSize: 15 }}
+        contentStyle={{
+          height: 50,
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+        }}
+        onPress={handleCloseAccount}
+      >
+        Close Account
+      </Button>
+      <View style={{ height: 16 }} />
 
-        <Button
-          mode="contained"
-          theme={{ roundness: 0 }}
-          style={{ borderRadius: 8 }}
-          icon={"logout"}
-          dark
-          buttonColor={"#EB5757"}
-          textColor="white"
-          labelStyle={{ fontSize: 15 }}
-          contentStyle={{
-            height: 50,
-            flexDirection: "row-reverse",
-            justifyContent: "space-between",
-          }}
-          onPress={logout}
-        >
-          Log Out
-        </Button>
-      </ScrollView>
-    </View>
-  );
+
+      <Button
+        mode="contained"
+        theme={{ roundness: 0 }}
+        style={{ borderRadius: 8 }}
+        icon={"logout"}
+        dark
+        buttonColor={"#EB5757"}
+        textColor="white"
+        labelStyle={{ fontSize: 15 }}
+        contentStyle={{
+          height: 50,
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+        }}
+        onPress={logout}
+      >
+        Log Out
+      </Button>
+    </ScrollView>
+  </View>
+);
 }
 
 const styles = StyleSheet.create({

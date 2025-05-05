@@ -22,6 +22,7 @@ const AuthContext = createContext<{
   logout: () => void;
   setupUser: (data: any) => void;
   getUser: () => void;
+  deleteAccount: () => void;
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
@@ -29,6 +30,7 @@ const AuthContext = createContext<{
   login: () => null,
   logout: () => null,
   getUser: () => null,
+  deleteAccount: () => null,
   setupUser: () => null,
   user: null,
   isLoading: false,
@@ -51,7 +53,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         if (user) {
           const userData = await supabase
             .from("profiles")
-            .select(`*`)
+            .select("*")
             .eq("id", user.id)
             .single();
           setUser(userData.data);
@@ -71,7 +73,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
   const getUser = async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select(`*`)
+      .select("*")
       .eq("id", user?.id)
       .single();
     if (!error) {
@@ -95,7 +97,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     } else {
       const userData = await supabase
         .from("profiles")
-        .select(`*`)
+        .select("*")
         .eq("id", data.user.id)
         .single();
       setUser(userData.data);
@@ -105,11 +107,59 @@ export function SessionProvider({ children }: PropsWithChildren) {
   };
 
   const logout = async () => {
-    setUser(null);
-    await GoogleSignin.revokeAccess();
-    await GoogleSignin.signOut();
-    const { error } = await supabase.auth.signOut();
+    try {
+      setUser(null);
+      
+      // Attempt to revoke and sign out of Google
+      try {
+        await GoogleSignin.revokeAccess();
+      } catch (err) {
+        console.warn("Google revokeAccess failed:", err);
+      }
+  
+      try {
+        await GoogleSignin.signOut();
+      } catch (err) {
+        console.warn("Google signOut failed:", err);
+      }
+  
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Supabase signOut error:", error.message);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+  
 
+  const deleteAccount = async () => {
+    if (!user) return;
+
+    setIsLoading(true);
+    try {
+      // Step 1: Delete profile row
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .delete()
+        .eq("id", user.id);
+
+      if (profileError) throw profileError;
+
+      // Step 2: Call Edge Function to delete user from Auth
+      const { error: functionError } = await supabase.functions.invoke("delete-user", {
+        body: { userId: user.id },
+      });
+
+      if (functionError) throw functionError;
+
+      // Step 3: Logout locally
+      await logout();
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -119,6 +169,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         logout,
         setupUser,
         getUser,
+        deleteAccount,
         user,
         isLoading,
         isAuthenticated,
