@@ -85,26 +85,34 @@ export function SessionProvider({ children }: PropsWithChildren) {
     setUser(data);
   };
 
-  const login = async (idToken: string) => {
+  const login = async (idToken: string, provider: "google" | "apple") => {
     setIsLoading(true);
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: "google",
-      token: idToken,
-    });
-
-    if (error) {
-      console.log(error);
-    } else {
+    try {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider,
+        token: idToken,
+      });
+      
+  
+      if (error) {
+        console.error("Login error:", error);
+        return;
+      }
+  
       const userData = await supabase
         .from("profiles")
         .select("*")
         .eq("id", data.user.id)
         .single();
+  
       setUser(userData.data);
+    } catch (err) {
+      console.error("Login catch error:", err);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
+  
 
   const logout = async () => {
     try {

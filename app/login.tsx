@@ -10,6 +10,7 @@ import {
 import { router } from "expo-router";
 import { Image, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 export default function Login() {
   const { login } = useAuth();
@@ -51,7 +52,7 @@ export default function Login() {
               await GoogleSignin.hasPlayServices();
               const userInfo = await GoogleSignin.signIn();
               if (userInfo.data?.idToken) {
-                await login(userInfo.data?.idToken);
+                await login(userInfo.data?.idToken, "google"); // ✅ CORRECT
                 router.replace("/");
               } else {
                 throw new Error("no ID token present!");
@@ -74,6 +75,47 @@ export default function Login() {
         >
           Continue with Google
         </Button>
+
+
+        <Button
+          icon="apple"
+          mode="outlined"
+          labelStyle={{ textAlign: "center", color: "black" }}
+          contentStyle={{ height: 48, width: "100%", padding: 0 }}
+          style={{ borderRadius: 8, marginTop: 16 }}
+          theme={{
+            colors: {
+              primary: Colors["light"].text,
+              outline: Colors["light"].text,
+            },
+            roundness: 0,
+          }}
+          onPress={async () => {
+            try {
+              const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                  AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                  AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+              });
+
+              if (credential.identityToken) {
+                await login(credential.identityToken, "apple"); // Pass provider explicitly
+                router.replace("/");
+              } else {
+                throw new Error("No identity token returned");
+              }
+            } catch (error) {
+              if (error.code === "ERR_CANCELED") {
+                // User canceled the sign-in
+              } else {
+                console.error("Apple Sign-In Error:", error);
+              }
+            }
+          }}
+        >
+          Continue with Apple
+        </Button>
       </View>
     </View>
   );
@@ -84,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     margin: SIZES.width * 0.05,
   },
-  
+
   loginCom: {
     marginTop: SIZES.height * 0.2,
     justifyContent: "center",

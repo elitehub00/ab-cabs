@@ -2,7 +2,7 @@
   "expo": {
     "name": "ab-cabs",
     "slug": "ab-cabs",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -16,6 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.abcabs.abcabs",
+      "usesAppleSignIn": true,
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.378744098867-1ea1qcrc3164io5d1suvapicctrb7uav"

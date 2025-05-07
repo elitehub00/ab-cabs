@@ -44,7 +44,7 @@ export function CustomHeader({ title, isHome, isMenu }: CustomHeaderProps) {
               variant="bodyMedium"
               style={{ color: Colors["light"].textAcc }}
             >
-              Hi {user? user.full_name.split(" ")[0]:""},
+              Hi {user && user.full_name ? user.full_name.split(" ")[0] : "Guest"},
             </NoScaleText>
           )}
           <NoScaleText
